@@ -20,6 +20,10 @@ data class ItemModel(
     val watchersCount: Int,
     @SerializedName("forks_count")
     val forksCount: Int,
+
+    // DetailActivity에 추가되는 프로퍼티
+    @SerializedName("html_url")
+    val repositoryUrl: String,
 )
 
 data class OwnerModel(
