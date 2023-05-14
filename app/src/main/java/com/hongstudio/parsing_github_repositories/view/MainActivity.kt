@@ -47,13 +47,13 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val searchedResult = response.body()
                 if (searchedResult?.items != null) {
-                    val adapter = RepositoryRecyclerViewAdapter(searchedResult.items)
+                    val adapter = RepositoryRecyclerViewAdapter()
                     binding.recyclerViewRepositories.apply {
                         this.adapter = adapter
                         layoutManager = LinearLayoutManager(this@MainActivity)
                         addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
                     }
-                    adapter.notifyDataSetChanged()
+                    adapter.submitList(searchedResult.items)
                 }
             }
 

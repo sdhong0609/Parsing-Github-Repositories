@@ -3,6 +3,8 @@ package com.hongstudio.parsing_github_repositories.adapter
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hongstudio.parsing_github_repositories.R
@@ -10,22 +12,16 @@ import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBindin
 import com.hongstudio.parsing_github_repositories.model.ItemModel
 import com.hongstudio.parsing_github_repositories.view.DetailActivity
 
-class RepositoryRecyclerViewAdapter(private val itemList: List<ItemModel>) :
-    RecyclerView.Adapter<RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>() {
+class RepositoryRecyclerViewAdapter :
+    ListAdapter<ItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
-        val binding =
-            ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return RepositoryItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RepositoryItemViewHolder, position: Int) {
-        val item = itemList[position]
-        holder.bind(item)
-    }
-
-    override fun getItemCount(): Int {
-        return itemList.size
+        holder.bind(getItem(position))
     }
 
     inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :
@@ -54,4 +50,15 @@ class RepositoryRecyclerViewAdapter(private val itemList: List<ItemModel>) :
             }
         }
     }
+}
+
+private class ItemDiffCallback : DiffUtil.ItemCallback<ItemModel>() {
+    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem.repositoryUrl == newItem.repositoryUrl
+    }
+
+    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem == newItem
+    }
+
 }
