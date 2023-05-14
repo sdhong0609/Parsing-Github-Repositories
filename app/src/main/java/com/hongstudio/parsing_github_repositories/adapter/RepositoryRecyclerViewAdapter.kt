@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
@@ -35,16 +34,10 @@ class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemMode
 
     inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: RepositoryItemModel) {
-            binding.apply {
-                Glide.with(itemView).load(item.owner.ownerImageUrl).into(imageViewOwner)
-                textViewRepositoryName.text = item.repositoryName
-                textViewOwnerName.text = itemView.context.getString(R.string.owner_with_value, item.owner.ownerName)
-                textViewFork.text = itemView.context.getString(R.string.fork_with_value, item.forksCount)
-                textViewWatchers.text = itemView.context.getString(R.string.watcher_with_value, item.watchersCount)
-                textViewStars.text = itemView.context.getString(R.string.star_with_value, item.starsCount)
-                textViewDescription.text = item.repositoryDescription
-            }
+            binding.item = item
+            Glide.with(itemView).load(item.owner.ownerImageUrl).into(binding.imageViewOwner)
         }
     }
 }
