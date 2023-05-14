@@ -1,6 +1,5 @@
 package com.hongstudio.parsing_github_repositories.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,18 +9,28 @@ import com.bumptech.glide.Glide
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBinding
 import com.hongstudio.parsing_github_repositories.model.ItemModel
-import com.hongstudio.parsing_github_repositories.view.DetailActivity
 
-class RepositoryRecyclerViewAdapter :
+class RepositoryRecyclerViewAdapter(private val onItemClick: (ItemModel) -> Unit, private val itemList: List<ItemModel>) :
     ListAdapter<ItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return RepositoryItemViewHolder(binding)
+        val viewHolder = RepositoryItemViewHolder(binding)
+        viewHolder.itemView.setOnClickListener {
+            val position = viewHolder.adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val item = getItem(position)
+                onItemClick(item)
+            }
+        }
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: RepositoryItemViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            onItemClick(itemList[position])
+        }
     }
 
     inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :
@@ -35,18 +44,6 @@ class RepositoryRecyclerViewAdapter :
                 textViewWatchers.text = itemView.context.getString(R.string.watcher_with_value, item.watchersCount)
                 textViewStars.text = itemView.context.getString(R.string.star_with_value, item.starsCount)
                 textViewDescription.text = item.repositoryDescription
-            }
-            itemView.setOnClickListener {
-                val intent = Intent(itemView.context, DetailActivity::class.java)
-                intent.putExtra("ownerImageUrl", item.owner.ownerImageUrl)
-                intent.putExtra("repositoryName", item.repositoryName)
-                intent.putExtra("ownerName", item.owner.ownerName)
-                intent.putExtra("forksCount", item.forksCount)
-                intent.putExtra("watchersCount", item.watchersCount)
-                intent.putExtra("starsCount", item.starsCount)
-                intent.putExtra("repositoryDescription", item.repositoryDescription)
-                intent.putExtra("repositoryUrl", item.repositoryUrl)
-                itemView.context.startActivity(intent)
             }
         }
     }

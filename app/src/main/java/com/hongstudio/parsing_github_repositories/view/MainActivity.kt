@@ -1,8 +1,9 @@
 package com.hongstudio.parsing_github_repositories.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +48,19 @@ class MainActivity : AppCompatActivity() {
             ) {
                 val searchedResult = response.body()
                 if (searchedResult?.items != null) {
-                    val adapter = RepositoryRecyclerViewAdapter()
+                    val adapter = RepositoryRecyclerViewAdapter({ itemModel ->
+                        val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                        intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
+                        intent.putExtra("repositoryName", itemModel.repositoryName)
+                        intent.putExtra("ownerName", itemModel.owner.ownerName)
+                        intent.putExtra("forksCount", itemModel.forksCount)
+                        intent.putExtra("watchersCount", itemModel.watchersCount)
+                        intent.putExtra("starsCount", itemModel.starsCount)
+                        intent.putExtra("repositoryDescription", itemModel.repositoryDescription)
+                        intent.putExtra("repositoryUrl", itemModel.repositoryUrl)
+                        this@MainActivity.startActivity(intent)
+                    }, searchedResult.items)
+
                     binding.recyclerViewRepositories.apply {
                         this.adapter = adapter
                         layoutManager = LinearLayoutManager(this@MainActivity)
