@@ -2,12 +2,12 @@ package com.hongstudio.parsing_github_repositories.model
 
 import com.google.gson.annotations.SerializedName
 
-data class RepositoryModel(
+data class RepositoryListModel(
     @SerializedName("items")
-    val items: List<ItemModel>?
+    val items: List<RepositoryItemModel>?
 )
 
-data class ItemModel(
+data class RepositoryItemModel(
     @SerializedName("name")
     val repositoryName: String,
     @SerializedName("owner")
@@ -20,8 +20,6 @@ data class ItemModel(
     val watchersCount: Int,
     @SerializedName("forks_count")
     val forksCount: Int,
-
-    // DetailActivity에 추가되는 프로퍼티
     @SerializedName("html_url")
     val repositoryUrl: String,
 )

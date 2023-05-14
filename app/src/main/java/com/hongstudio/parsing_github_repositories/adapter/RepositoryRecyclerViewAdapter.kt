@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBinding
-import com.hongstudio.parsing_github_repositories.model.ItemModel
+import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
-class RepositoryRecyclerViewAdapter(private val onItemClick: (ItemModel) -> Unit, private val itemList: List<ItemModel>) :
-    ListAdapter<ItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
+class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemModel) -> Unit, private val itemList: List<RepositoryItemModel>) :
+    ListAdapter<RepositoryItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
         val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,7 +35,7 @@ class RepositoryRecyclerViewAdapter(private val onItemClick: (ItemModel) -> Unit
 
     inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ItemModel) {
+        fun bind(item: RepositoryItemModel) {
             binding.apply {
                 Glide.with(itemView).load(item.owner.ownerImageUrl).into(imageViewOwner)
                 textViewRepositoryName.text = item.repositoryName
@@ -49,12 +49,12 @@ class RepositoryRecyclerViewAdapter(private val onItemClick: (ItemModel) -> Unit
     }
 }
 
-private class ItemDiffCallback : DiffUtil.ItemCallback<ItemModel>() {
-    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+private class ItemDiffCallback : DiffUtil.ItemCallback<RepositoryItemModel>() {
+    override fun areItemsTheSame(oldItem: RepositoryItemModel, newItem: RepositoryItemModel): Boolean {
         return oldItem.repositoryUrl == newItem.repositoryUrl
     }
 
-    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+    override fun areContentsTheSame(oldItem: RepositoryItemModel, newItem: RepositoryItemModel): Boolean {
         return oldItem == newItem
     }
 

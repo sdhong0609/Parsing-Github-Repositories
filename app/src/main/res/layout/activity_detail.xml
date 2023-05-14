@@ -5,6 +5,37 @@
 
     <data>
 
+        <variable
+            name="repositoryName"
+            type="String" />
+
+        <variable
+            name="ownerName"
+            type="String" />
+
+        <variable
+            name="forksCount"
+            type="Integer" />
+
+        <variable
+            name="watchersCount"
+            type="Integer" />
+
+        <variable
+            name="starsCount"
+            type="Integer" />
+
+        <variable
+            name="repositoryDescription"
+            type="String" />
+
+        <variable
+            name="repositoryUrl"
+            type="String" />
+
+        <variable
+            name="detailActivity"
+            type="com.hongstudio.parsing_github_repositories.view.DetailActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +57,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{repositoryName}"
             android:textColor="@color/black"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@id/imageView_owner"
@@ -40,6 +72,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@{String.format(@string/owner_with_value, ownerName)}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_fork"
@@ -51,6 +84,7 @@
             android:id="@+id/textView_fork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.format(@string/fork_with_value, forksCount)}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_watchers"
@@ -62,6 +96,7 @@
             android:id="@+id/textView_watchers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.format(@string/watcher_with_value, watchersCount)}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_stars"
@@ -73,6 +108,7 @@
             android:id="@+id/textView_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.format(@string/star_with_value, starsCount)}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_description"
@@ -86,6 +122,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
+            android:text="@{repositoryDescription}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_repository_url"
@@ -97,9 +134,11 @@
             android:id="@+id/textView_repository_url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:layout_marginTop="16dp"
+            android:onClick="@{detailActivity.repositoryUrlClickListener}"
+            android:text="@{repositoryUrl}"
             android:textColor="@color/purple_700"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"

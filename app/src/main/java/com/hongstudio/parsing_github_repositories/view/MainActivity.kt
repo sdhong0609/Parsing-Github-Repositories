@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBinding
-import com.hongstudio.parsing_github_repositories.model.RepositoryModel
+import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.retrofitinterface.NetworkServiceInterface
 import retrofit2.Call
 import retrofit2.Callback
@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         val searchedResultCall = networkService.getSearchedResult(searchedWord)
 
-        searchedResultCall.enqueue(object : Callback<RepositoryModel> {
+        searchedResultCall.enqueue(object : Callback<RepositoryListModel> {
             override fun onResponse(
-                call: Call<RepositoryModel>,
-                response: Response<RepositoryModel>
+                call: Call<RepositoryListModel>,
+                response: Response<RepositoryListModel>
             ) {
                 val searchedResult = response.body()
                 if (searchedResult?.items != null) {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<RepositoryModel>, t: Throwable) {
+            override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
                 call.cancel()
             }
 
