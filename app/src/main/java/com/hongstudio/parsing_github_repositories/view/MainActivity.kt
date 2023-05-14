@@ -11,7 +11,7 @@ import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
-import com.hongstudio.parsing_github_repositories.retrofitinterface.NetworkServiceInterface
+import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,10 +37,10 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val networkService: NetworkServiceInterface =
-            retrofit.create(NetworkServiceInterface::class.java)
+        val networkService: GithubRepositoryService =
+            retrofit.create(GithubRepositoryService::class.java)
 
-        val searchedResultCall = networkService.getSearchedResult(searchedWord)
+        val searchedResultCall = networkService.getSearchedRepositoryList(searchedWord)
 
         searchedResultCall.enqueue(object : Callback<RepositoryListModel> {
             override fun onResponse(
