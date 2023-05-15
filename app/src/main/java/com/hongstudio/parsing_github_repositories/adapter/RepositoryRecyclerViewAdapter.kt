@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
-class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemModel) -> Unit, private val itemList: List<RepositoryItemModel>) :
+class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemModel) -> Unit) :
     ListAdapter<RepositoryItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
@@ -27,9 +27,6 @@ class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemMode
 
     override fun onBindViewHolder(holder: RepositoryItemViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener {
-            onItemClick(itemList[position])
-        }
     }
 
     inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :

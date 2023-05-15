@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
     private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
-    private val dividerItemDecoration = DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
+    private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val networkService: GithubRepositoryService =
+        val githubRepositoryService: GithubRepositoryService =
             retrofit.create(GithubRepositoryService::class.java)
 
-        val searchedResultCall = networkService.getSearchedRepositoryList(searchedWord)
+        val searchedRepositoryListCall = githubRepositoryService.getSearchedRepositoryList(searchedWord)
 
-        searchedResultCall.enqueue(object : Callback<RepositoryListModel> {
+        searchedRepositoryListCall.enqueue(object : Callback<RepositoryListModel> {
             override fun onResponse(
                 call: Call<RepositoryListModel>,
                 response: Response<RepositoryListModel>
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val searchedResult = response.body()
                     if (searchedResult?.items != null) {
-                        repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter({ itemModel ->
+                        repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { itemModel ->
                             val intent = Intent(this@MainActivity, DetailActivity::class.java)
                             intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
                             intent.putExtra("repositoryName", itemModel.repositoryName)
@@ -62,10 +62,13 @@ class MainActivity : AppCompatActivity() {
                             intent.putExtra("forksCount", itemModel.forksCount)
                             intent.putExtra("watchersCount", itemModel.watchersCount)
                             intent.putExtra("starsCount", itemModel.starsCount)
-                            intent.putExtra("repositoryDescription", itemModel.repositoryDescription)
+                            intent.putExtra(
+                                "repositoryDescription",
+                                itemModel.repositoryDescription
+                            )
                             intent.putExtra("repositoryUrl", itemModel.repositoryUrl)
                             this@MainActivity.startActivity(intent)
-                        }, searchedResult.items)
+                        }
 
                         binding.recyclerViewRepositories.apply {
                             adapter = repositoryRecyclerViewAdapter
