@@ -21,6 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
+    private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
+    private val dividerItemDecoration = DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val searchedResult = response.body()
                     if (searchedResult?.items != null) {
-                        val adapter = RepositoryRecyclerViewAdapter({ itemModel ->
+                        repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter({ itemModel ->
                             val intent = Intent(this@MainActivity, DetailActivity::class.java)
                             intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
                             intent.putExtra("repositoryName", itemModel.repositoryName)
@@ -65,11 +68,11 @@ class MainActivity : AppCompatActivity() {
                         }, searchedResult.items)
 
                         binding.recyclerViewRepositories.apply {
-                            this.adapter = adapter
-                            layoutManager = LinearLayoutManager(this@MainActivity)
-                            addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+                            adapter = repositoryRecyclerViewAdapter
+                            layoutManager = linearLayoutManager
+                            addItemDecoration(dividerItemDecoration)
                         }
-                        adapter.submitList(searchedResult.items)
+                        repositoryRecyclerViewAdapter.submitList(searchedResult.items)
                     }
                 } else {
                     Toast.makeText(
