@@ -3,6 +3,7 @@ package com.hongstudio.parsing_github_repositories.view
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -47,32 +48,45 @@ class MainActivity : AppCompatActivity() {
                 call: Call<RepositoryListModel>,
                 response: Response<RepositoryListModel>
             ) {
-                val searchedResult = response.body()
-                if (searchedResult?.items != null) {
-                    val adapter = RepositoryRecyclerViewAdapter({ itemModel ->
-                        val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                        intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
-                        intent.putExtra("repositoryName", itemModel.repositoryName)
-                        intent.putExtra("ownerName", itemModel.owner.ownerName)
-                        intent.putExtra("forksCount", itemModel.forksCount)
-                        intent.putExtra("watchersCount", itemModel.watchersCount)
-                        intent.putExtra("starsCount", itemModel.starsCount)
-                        intent.putExtra("repositoryDescription", itemModel.repositoryDescription)
-                        intent.putExtra("repositoryUrl", itemModel.repositoryUrl)
-                        this@MainActivity.startActivity(intent)
-                    }, searchedResult.items)
+                if (response.isSuccessful) {
+                    val searchedResult = response.body()
+                    if (searchedResult?.items != null) {
+                        val adapter = RepositoryRecyclerViewAdapter({ itemModel ->
+                            val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                            intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
+                            intent.putExtra("repositoryName", itemModel.repositoryName)
+                            intent.putExtra("ownerName", itemModel.owner.ownerName)
+                            intent.putExtra("forksCount", itemModel.forksCount)
+                            intent.putExtra("watchersCount", itemModel.watchersCount)
+                            intent.putExtra("starsCount", itemModel.starsCount)
+                            intent.putExtra("repositoryDescription", itemModel.repositoryDescription)
+                            intent.putExtra("repositoryUrl", itemModel.repositoryUrl)
+                            this@MainActivity.startActivity(intent)
+                        }, searchedResult.items)
 
-                    binding.recyclerViewRepositories.apply {
-                        this.adapter = adapter
-                        layoutManager = LinearLayoutManager(this@MainActivity)
-                        addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+                        binding.recyclerViewRepositories.apply {
+                            this.adapter = adapter
+                            layoutManager = LinearLayoutManager(this@MainActivity)
+                            addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+                        }
+                        adapter.submitList(searchedResult.items)
                     }
-                    adapter.submitList(searchedResult.items)
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        getString(R.string.something_wrong_happened),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
                 call.cancel()
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.something_wrong_happened),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         })
