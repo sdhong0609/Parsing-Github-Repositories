@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.hongstudio.parsing_github_repositories.databinding.ItemRecyclerBinding
+import com.hongstudio.parsing_github_repositories.databinding.ItemRepositoryBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
 class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemModel) -> Unit) :
     ListAdapter<RepositoryItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
-        val binding = ItemRecyclerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemRepositoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val viewHolder = RepositoryItemViewHolder(binding)
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.adapterPosition
@@ -29,7 +29,7 @@ class RepositoryRecyclerViewAdapter(private val onItemClick: (RepositoryItemMode
         holder.bind(getItem(position))
     }
 
-    inner class RepositoryItemViewHolder(private val binding: ItemRecyclerBinding) :
+    inner class RepositoryItemViewHolder(private val binding: ItemRepositoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: RepositoryItemModel) {
