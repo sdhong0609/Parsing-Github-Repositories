@@ -17,12 +17,10 @@ import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBindin
 import com.hongstudio.parsing_github_repositories.model.OwnerModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
-import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
+import com.hongstudio.parsing_github_repositories.service.RetrofitClient.githubRepositoryService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -61,14 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadRepositoriesData(keyword: String) {
         if (keyword.trim().isNotEmpty()) {
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            val githubRepositoryService: GithubRepositoryService =
-                retrofit.create(GithubRepositoryService::class.java)
-
             val searchedRepositoryListCall = githubRepositoryService.getSearchedRepositoryList(keyword)
 
             searchedRepositoryListCall.enqueue(object : Callback<RepositoryListModel> {
