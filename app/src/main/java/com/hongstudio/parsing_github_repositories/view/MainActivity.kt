@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBinding
+import com.hongstudio.parsing_github_repositories.model.OwnerModel
+import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
 import retrofit2.Call
@@ -25,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
+    private lateinit var repositoryItem: RepositoryItemModel
     private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
     private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
     private val inputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
@@ -71,19 +74,18 @@ class MainActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val searchedResult = response.body()
                         if (searchedResult?.items != null) {
-                            repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { itemModel ->
-                                val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                                intent.putExtra("ownerImageUrl", itemModel.owner.ownerImageUrl)
-                                intent.putExtra("repositoryName", itemModel.repositoryName)
-                                intent.putExtra("ownerName", itemModel.owner.ownerName)
-                                intent.putExtra("forksCount", itemModel.forksCount)
-                                intent.putExtra("watchersCount", itemModel.watchersCount)
-                                intent.putExtra("starsCount", itemModel.starsCount)
-                                intent.putExtra(
-                                    "repositoryDescription",
-                                    itemModel.repositoryDescription
+                            repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
+                                repositoryItem = RepositoryItemModel(
+                                    repositoryName = item.repositoryName,
+                                    owner = OwnerModel(ownerName = item.owner.ownerName, ownerImageUrl = item.owner.ownerImageUrl),
+                                    repositoryDescription = item.repositoryDescription,
+                                    starsCount = item.starsCount,
+                                    watchersCount = item.watchersCount,
+                                    forksCount = item.forksCount,
+                                    repositoryUrl = item.repositoryUrl
                                 )
-                                intent.putExtra("repositoryUrl", itemModel.repositoryUrl)
+                                val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                                intent.putExtra("repositoryItem", repositoryItem)
                                 this@MainActivity.startActivity(intent)
                             }
 
