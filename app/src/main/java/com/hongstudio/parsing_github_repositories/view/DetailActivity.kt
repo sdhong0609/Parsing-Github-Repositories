@@ -14,7 +14,7 @@ import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
-class DetailActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
     private lateinit var binding: ActivityDetailBinding
     private var repositoryItem: RepositoryItemModel? = null
 
@@ -30,15 +30,15 @@ class DetailActivity : AppCompatActivity() {
         if (repositoryItem != null) {
             binding.apply {
                 repositoryName = repositoryItem?.repositoryName
-                ownerName = repositoryItem?.owner?.ownerName ?: ""
-                forksCount = repositoryItem?.forksCount ?: 0
-                watchersCount = repositoryItem?.watchersCount ?: 0
-                starsCount = repositoryItem?.starsCount ?: 0
-                repositoryDescription = repositoryItem?.repositoryDescription ?: ""
-                repositoryUrl = repositoryItem?.repositoryUrl ?: ""
+                ownerName = repositoryItem?.owner?.ownerName
+                forksCount = repositoryItem?.forksCount
+                watchersCount = repositoryItem?.watchersCount
+                starsCount = repositoryItem?.starsCount
+                repositoryDescription = repositoryItem?.repositoryDescription
+                repositoryUrl = repositoryItem?.repositoryUrl
                 Glide.with(this@DetailActivity).load(repositoryItem?.owner?.ownerImageUrl).into(imageViewOwner)
 
-                detailActivity = this@DetailActivity
+                detailScreenEventAction = this@DetailActivity
                 textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             }
         } else {
@@ -46,7 +46,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    val repositoryUrlClickListener = View.OnClickListener {
+    override fun onClickRepositoryLink(view: View) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(binding.repositoryUrl)
         startActivity(intent)

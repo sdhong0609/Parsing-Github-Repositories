@@ -34,8 +34,8 @@
             type="String" />
 
         <variable
-            name="detailActivity"
-            type="com.hongstudio.parsing_github_repositories.view.DetailActivity" />
+            name="detailScreenEventAction"
+            type="com.hongstudio.parsing_github_repositories.view.DetailScreenEventAction" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -137,7 +137,7 @@
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:onClick="@{detailActivity.repositoryUrlClickListener}"
+            android:onClick="@{detailScreenEventAction.onClickRepositoryLink}"
             android:text="@{repositoryUrl}"
             android:textColor="@color/hyperlink_color"
             android:textSize="16sp"

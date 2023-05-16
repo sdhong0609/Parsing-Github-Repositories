@@ -22,24 +22,23 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), HomeEventAction {
     private lateinit var binding: ActivityMainBinding
     private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
     private lateinit var repositoryItem: RepositoryItemModel
     private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
     private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
     private val inputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
-    val buttonSearchClickListener = View.OnClickListener { searchRepositories() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.mainActivity = this@MainActivity
+        binding.homeEventAction = this@MainActivity
 
         binding.editTextSearch.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchRepositories()
+                    searchRepositoriesAction()
                     true
                 } else {
                     false
@@ -48,7 +47,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchRepositories() {
+    override fun onClickSearchButton(view: View) {
+        searchRepositoriesAction()
+    }
+
+    private fun searchRepositoriesAction() {
         binding.apply {
             inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
             circularProgressBar.visibility = View.VISIBLE
@@ -68,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     if (response.isSuccessful) {
                         val searchedResult = response.body()
-                        if (searchedResult?.items != null) {
+                        if (searchedResult?.items != null && searchedResult.items.isNotEmpty()) {
                             repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
                                 repositoryItem = RepositoryItemModel(
                                     repositoryName = item.repositoryName,
@@ -91,6 +94,12 @@ class MainActivity : AppCompatActivity() {
                             }
                             repositoryRecyclerViewAdapter.submitList(searchedResult.items)
                             binding.recyclerViewRepositories.visibility = View.VISIBLE
+                        } else {
+                            Toast.makeText(
+                                this@MainActivity,
+                                getString(R.string.there_is_no_result),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
                         Toast.makeText(
@@ -120,4 +129,5 @@ class MainActivity : AppCompatActivity() {
             ).show()
         }
     }
+
 }
