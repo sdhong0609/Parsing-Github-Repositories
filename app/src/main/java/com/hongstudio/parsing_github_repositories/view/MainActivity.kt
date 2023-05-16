@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
     private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
     private val inputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
+    val buttonSearchClickListener = View.OnClickListener { searchRepositories() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +39,9 @@ class MainActivity : AppCompatActivity() {
         binding.mainActivity = this@MainActivity
 
         binding.editTextSearch.apply {
-            setOnEditorActionListener { view, actionId, _ ->
+            setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-                    loadRepositoriesData(text.toString())
+                    searchRepositories()
                     true
                 } else {
                     false
@@ -50,8 +50,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val buttonSearchClickListener = View.OnClickListener {
-        loadRepositoriesData(binding.editTextSearch.text.toString())
+    private fun searchRepositories() {
+        binding.apply {
+            inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
+            circularProgressBar.visibility = View.VISIBLE
+            recyclerViewRepositories.visibility = View.INVISIBLE
+            loadRepositoriesData(editTextSearch.text.toString())
+        }
     }
 
     private fun loadRepositoriesData(keyword: String) {
@@ -95,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                                 addItemDecoration(dividerItemDecoration)
                             }
                             repositoryRecyclerViewAdapter.submitList(searchedResult.items)
+                            binding.recyclerViewRepositories.visibility = View.VISIBLE
                         }
                     } else {
                         Toast.makeText(
@@ -103,6 +109,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                    binding.circularProgressBar.visibility = View.GONE
                 }
 
                 override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
