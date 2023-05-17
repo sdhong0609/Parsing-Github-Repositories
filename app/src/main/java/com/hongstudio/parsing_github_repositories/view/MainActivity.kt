@@ -98,25 +98,13 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                                 repositoryRecyclerViewAdapter.submitList(searchedResult.items)
                                 binding.recyclerViewRepositories.visibility = View.VISIBLE
                             } else {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    getString(R.string.there_is_no_result),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                showToast(getString(R.string.there_is_no_result))
                             }
                         } else {
-                            Toast.makeText(
-                                this@MainActivity,
-                                getString(R.string.something_wrong_happened),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showToast(getString(R.string.something_wrong_happened))
                         }
                     } else {
-                        Toast.makeText(
-                            this@MainActivity,
-                            getString(R.string.something_wrong_happened),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showToast(getString(R.string.something_wrong_happened))
                     }
                     binding.circularProgressBar.visibility = View.GONE
                 }
@@ -127,18 +115,10 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                     when (t) {
                         is IOException -> {
                             binding.imageViewWifiOff.visibility = View.VISIBLE
-                            Toast.makeText(
-                                this@MainActivity,
-                                getString(R.string.there_is_no_interent),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showToast(getString(R.string.there_is_no_interent))
                         }
                         else -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                getString(R.string.something_wrong_happened),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            showToast(getString(R.string.something_wrong_happened))
                         }
                     }
                 }
@@ -146,12 +126,12 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
             })
         } else {
             binding.circularProgressBar.visibility = View.GONE
-            Toast.makeText(
-                this@MainActivity,
-                getString(R.string.please_input_keyword),
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast(getString(R.string.please_input_keyword))
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
     }
 
 }
