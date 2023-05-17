@@ -21,6 +21,7 @@ import com.hongstudio.parsing_github_repositories.service.RetrofitClient.githubR
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class MainActivity : AppCompatActivity(), HomeEventAction {
     private lateinit var binding: ActivityMainBinding
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     private fun searchRepositoriesAction() {
         binding.apply {
             inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
+            imageViewWifiOff.visibility = View.GONE
             circularProgressBar.visibility = View.VISIBLE
             recyclerViewRepositories.visibility = View.INVISIBLE
             loadRepositoriesData(editTextSearch.text.toString())
@@ -71,33 +73,41 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                 ) {
                     if (response.isSuccessful) {
                         val searchedResult = response.body()
-                        if (searchedResult?.items != null && searchedResult.items.isNotEmpty()) {
-                            repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
-                                repositoryItem = RepositoryItemModel(
-                                    repositoryName = item.repositoryName,
-                                    owner = OwnerModel(ownerName = item.owner.ownerName, ownerImageUrl = item.owner.ownerImageUrl),
-                                    repositoryDescription = item.repositoryDescription,
-                                    starsCount = item.starsCount,
-                                    watchersCount = item.watchersCount,
-                                    forksCount = item.forksCount,
-                                    repositoryUrl = item.repositoryUrl
-                                )
-                                val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                                intent.putExtra("repositoryItem", repositoryItem)
-                                this@MainActivity.startActivity(intent)
-                            }
+                        if (searchedResult?.items != null) {
+                            if (searchedResult.items.isNotEmpty()) {
+                                repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
+                                    repositoryItem = RepositoryItemModel(
+                                        repositoryName = item.repositoryName,
+                                        owner = OwnerModel(ownerName = item.owner.ownerName, ownerImageUrl = item.owner.ownerImageUrl),
+                                        repositoryDescription = item.repositoryDescription,
+                                        starsCount = item.starsCount,
+                                        watchersCount = item.watchersCount,
+                                        forksCount = item.forksCount,
+                                        repositoryUrl = item.repositoryUrl
+                                    )
+                                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                                    intent.putExtra("repositoryItem", repositoryItem)
+                                    this@MainActivity.startActivity(intent)
+                                }
 
-                            binding.recyclerViewRepositories.apply {
-                                adapter = repositoryRecyclerViewAdapter
-                                layoutManager = linearLayoutManager
-                                addItemDecoration(dividerItemDecoration)
+                                binding.recyclerViewRepositories.apply {
+                                    adapter = repositoryRecyclerViewAdapter
+                                    layoutManager = linearLayoutManager
+                                    addItemDecoration(dividerItemDecoration)
+                                }
+                                repositoryRecyclerViewAdapter.submitList(searchedResult.items)
+                                binding.recyclerViewRepositories.visibility = View.VISIBLE
+                            } else {
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    getString(R.string.there_is_no_result),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            repositoryRecyclerViewAdapter.submitList(searchedResult.items)
-                            binding.recyclerViewRepositories.visibility = View.VISIBLE
                         } else {
                             Toast.makeText(
                                 this@MainActivity,
-                                getString(R.string.there_is_no_result),
+                                getString(R.string.something_wrong_happened),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -112,16 +122,30 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                 }
 
                 override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
+                    binding.circularProgressBar.visibility = View.GONE
                     call.cancel()
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.something_wrong_happened),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    when (t) {
+                        is IOException -> {
+                            binding.imageViewWifiOff.visibility = View.VISIBLE
+                            Toast.makeText(
+                                this@MainActivity,
+                                getString(R.string.there_is_no_interent),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this@MainActivity,
+                                getString(R.string.something_wrong_happened),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 }
 
             })
         } else {
+            binding.circularProgressBar.visibility = View.GONE
             Toast.makeText(
                 this@MainActivity,
                 getString(R.string.please_input_keyword),
