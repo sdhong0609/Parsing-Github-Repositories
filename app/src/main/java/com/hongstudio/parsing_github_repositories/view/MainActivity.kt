@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
         }
     }
 
-    override fun onClickSearchButton(view: View) {
+    override fun onSearchButtonClick(view: View) {
         searchRepositoriesAction()
     }
 
@@ -103,13 +104,13 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                                 repositoryRecyclerViewAdapter.submitList(searchedResult.items)
                                 binding.recyclerViewVisible = true
                             } else { // 검색결과가 존재하지 않을 때
-                                showToast(getString(R.string.there_is_no_result))
+                                showToast(R.string.there_is_no_result)
                             }
                         } else { // 검색결과가 null일 때
-                            showToast(getString(R.string.something_wrong_happened))
+                            showToast(R.string.something_wrong_happened)
                         }
                     } else { // 응답이 실패했을 때
-                        showToast(getString(R.string.something_wrong_happened))
+                        showToast(R.string.something_wrong_happened)
                     }
                     binding.progressBarVisible = false
                 }
@@ -120,10 +121,10 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                     when (t) {
                         is IOException -> {
                             binding.wifiImageVisible = true
-                            showToast(getString(R.string.there_is_no_interent))
+                            showToast(R.string.there_is_no_interent)
                         }
                         else -> {
-                            showToast(getString(R.string.something_wrong_happened))
+                            showToast(R.string.something_wrong_happened)
                         }
                     }
                 }
@@ -131,12 +132,12 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
             })
         } else { // 검색창이 비어있을 때
             binding.progressBarVisible = false
-            showToast(getString(R.string.please_input_keyword))
+            showToast(R.string.please_input_keyword)
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+    private fun showToast(@StringRes resId: Int) {
+        Toast.makeText(this@MainActivity, resId, Toast.LENGTH_SHORT).show()
     }
 
 }

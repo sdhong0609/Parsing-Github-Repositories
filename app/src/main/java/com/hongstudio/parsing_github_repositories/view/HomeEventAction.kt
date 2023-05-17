@@ -4,5 +4,5 @@ import android.view.View
 
 interface HomeEventAction {
 
-    fun onClickSearchButton(view: View)
+    fun onSearchButtonClick(view: View)
 }

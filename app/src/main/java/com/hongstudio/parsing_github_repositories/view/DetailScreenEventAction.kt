@@ -4,5 +4,5 @@ import android.view.View
 
 interface DetailScreenEventAction {
 
-    fun onClickRepositoryLink(view: View)
+    fun onRepositoryLinkClick(view: View)
 }

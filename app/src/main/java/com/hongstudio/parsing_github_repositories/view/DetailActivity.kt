@@ -44,11 +44,11 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
             }
         } else {
             binding.noDataImageVisible = true
-            Toast.makeText(this@DetailActivity, getString(R.string.failed_load_data), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.failed_load_data), Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onClickRepositoryLink(view: View) {
+    override fun onRepositoryLinkClick(view: View) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(binding.repositoryUrl)
         startActivity(intent)
