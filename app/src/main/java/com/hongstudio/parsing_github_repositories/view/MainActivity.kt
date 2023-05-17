@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     }
 
     private fun loadRepositoriesData(keyword: String) {
-        if (keyword.trim().isNotEmpty()) {
+        if (keyword.trim().isNotEmpty()) { // 검색창이 비어있지 않을 때
             val searchedRepositoryListCall = githubRepositoryService.getSearchedRepositoryList(keyword)
 
             searchedRepositoryListCall.enqueue(object : Callback<RepositoryListModel> {
@@ -71,10 +71,10 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                     call: Call<RepositoryListModel>,
                     response: Response<RepositoryListModel>
                 ) {
-                    if (response.isSuccessful) {
+                    if (response.isSuccessful) { // 응답이 성공했을 때
                         val searchedResult = response.body()
-                        if (searchedResult?.items != null) {
-                            if (searchedResult.items.isNotEmpty()) {
+                        if (searchedResult?.items != null) { // 검색결과가 null이 아닐 때
+                            if (searchedResult.items.isNotEmpty()) { // 검색결과가 존재할 때
                                 repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
                                     repositoryItem = RepositoryItemModel(
                                         repositoryName = item.repositoryName,
@@ -97,13 +97,13 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                                 }
                                 repositoryRecyclerViewAdapter.submitList(searchedResult.items)
                                 binding.recyclerViewRepositories.visibility = View.VISIBLE
-                            } else {
+                            } else { // 검색결과가 존재하지 않을 때
                                 showToast(getString(R.string.there_is_no_result))
                             }
-                        } else {
+                        } else { // 검색결과가 null일 때
                             showToast(getString(R.string.something_wrong_happened))
                         }
-                    } else {
+                    } else { // 응답이 실패했을 때
                         showToast(getString(R.string.something_wrong_happened))
                     }
                     binding.circularProgressBar.visibility = View.GONE
