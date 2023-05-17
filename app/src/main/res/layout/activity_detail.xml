@@ -5,35 +5,9 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
-            name="repositoryName"
-            type="String" />
-
-        <variable
-            name="ownerName"
-            type="String" />
-
-        <variable
-            name="forksCount"
-            type="Integer" />
-
-        <variable
-            name="watchersCount"
-            type="Integer" />
-
-        <variable
-            name="starsCount"
-            type="Integer" />
-
-        <variable
-            name="repositoryDescription"
-            type="String" />
-
-        <variable
-            name="repositoryUrl"
-            type="String" />
+            name="repo"
+            type="com.hongstudio.parsing_github_repositories.model.RepositoryItemModel" />
 
         <variable
             name="noDataImageVisible"
@@ -63,7 +37,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{repositoryName}"
+            android:text="@{repo.repositoryName}"
             android:textColor="@color/text_color"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@id/imageView_owner"
@@ -78,7 +52,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{String.format(@string/owner_with_value, ownerName)}"
+            android:text="@{String.format(@string/owner_with_value, repo.owner.ownerName)}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_fork"
@@ -90,7 +64,7 @@
             android:id="@+id/textView_fork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/fork_with_value, forksCount)}"
+            android:text="@{String.format(@string/fork_with_value, repo.forksCount)}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_watchers"
@@ -102,7 +76,7 @@
             android:id="@+id/textView_watchers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/watcher_with_value, watchersCount)}"
+            android:text="@{String.format(@string/watcher_with_value, repo.watchersCount)}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_stars"
@@ -114,7 +88,7 @@
             android:id="@+id/textView_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/star_with_value, starsCount)}"
+            android:text="@{String.format(@string/star_with_value, repo.starsCount)}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_description"
@@ -128,7 +102,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{repositoryDescription}"
+            android:text="@{repo.repositoryDescription}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_repository_url"
@@ -143,8 +117,8 @@
             android:layout_marginTop="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:onClick="@{detailScreenEventAction.onClickRepositoryLink}"
-            android:text="@{repositoryUrl}"
+            android:onClick="@{() -> detailScreenEventAction.onClickRepositoryLink(repo.repositoryUrl)}"
+            android:text="@{repo.repositoryUrl}"
             android:textColor="@color/hyperlink_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -155,7 +129,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/no_data"
-            android:visibility="@{noDataImageVisible ? View.VISIBLE : View.GONE}"
+            app:isVisible="@{noDataImageVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

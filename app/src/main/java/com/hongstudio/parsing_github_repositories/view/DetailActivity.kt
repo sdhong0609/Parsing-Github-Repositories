@@ -1,11 +1,11 @@
 package com.hongstudio.parsing_github_repositories.view
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -24,19 +24,14 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
         binding.noDataImageVisible = false
 
         repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("repositoryItem", RepositoryItemModel::class.java)
+            intent.getParcelableExtra(EXTRA_REPOSITORY, RepositoryItemModel::class.java)
         } else {
-            intent.getParcelableExtra("repositoryItem")
+            intent.getParcelableExtra(EXTRA_REPOSITORY)
         }
+
         if (repositoryItem != null) {
             binding.apply {
-                repositoryName = repositoryItem?.repositoryName
-                ownerName = repositoryItem?.owner?.ownerName
-                forksCount = repositoryItem?.forksCount
-                watchersCount = repositoryItem?.watchersCount
-                starsCount = repositoryItem?.starsCount
-                repositoryDescription = repositoryItem?.repositoryDescription
-                repositoryUrl = repositoryItem?.repositoryUrl
+                binding.repo = repositoryItem
                 Glide.with(this@DetailActivity).load(repositoryItem?.owner?.ownerImageUrl).into(imageViewOwner)
 
                 detailScreenEventAction = this@DetailActivity
@@ -48,9 +43,20 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
         }
     }
 
-    override fun onClickRepositoryLink(view: View) {
+    override fun onClickRepositoryLink(url: String) {
+        // TODO: url이 맞는지 검증
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(binding.repositoryUrl)
+        intent.data = Uri.parse(url)
         startActivity(intent)
+    }
+
+    companion object {
+        private const val EXTRA_REPOSITORY = "EXTRA_REPOSITORY"
+
+        fun newIntent(context: Context, repositoryItem: RepositoryItemModel): Intent {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(EXTRA_REPOSITORY, repositoryItem)
+            return intent
+        }
     }
 }
