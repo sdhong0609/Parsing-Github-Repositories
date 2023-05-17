@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="repositoryName"
             type="String" />
@@ -32,6 +34,10 @@
         <variable
             name="repositoryUrl"
             type="String" />
+
+        <variable
+            name="noDataImageVisible"
+            type="Boolean" />
 
         <variable
             name="detailScreenEventAction"
@@ -144,6 +150,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView_description"
             tools:text="https://github.com/baidu/Cafe" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_data"
+            android:visibility="@{noDataImageVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -21,6 +21,7 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
+        binding.noDataImageVisible = false
 
         repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra("repositoryItem", RepositoryItemModel::class.java)
@@ -42,7 +43,8 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
                 textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
             }
         } else {
-            Toast.makeText(this@DetailActivity, getString(R.string.something_wrong_happened), Toast.LENGTH_SHORT).show()
+            binding.noDataImageVisible = true
+            Toast.makeText(this@DetailActivity, getString(R.string.failed_load_data), Toast.LENGTH_SHORT).show()
         }
     }
 
