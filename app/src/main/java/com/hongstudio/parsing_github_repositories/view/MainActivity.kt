@@ -34,7 +34,12 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.homeEventAction = this@MainActivity
+        binding.apply {
+            homeEventAction = this@MainActivity
+            wifiImageVisible = false
+            progressBarVisible = false
+            recyclerViewVisible = false
+        }
 
         binding.editTextSearch.apply {
             setOnEditorActionListener { _, actionId, _ ->
@@ -55,9 +60,9 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     private fun searchRepositoriesAction() {
         binding.apply {
             inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
-            imageViewWifiOff.visibility = View.GONE
-            circularProgressBar.visibility = View.VISIBLE
-            recyclerViewRepositories.visibility = View.INVISIBLE
+            wifiImageVisible = false
+            progressBarVisible = true
+            recyclerViewVisible = false
             loadRepositoriesData(editTextSearch.text.toString())
         }
     }
@@ -96,7 +101,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                                     addItemDecoration(dividerItemDecoration)
                                 }
                                 repositoryRecyclerViewAdapter.submitList(searchedResult.items)
-                                binding.recyclerViewRepositories.visibility = View.VISIBLE
+                                binding.recyclerViewVisible = true
                             } else { // 검색결과가 존재하지 않을 때
                                 showToast(getString(R.string.there_is_no_result))
                             }
@@ -106,15 +111,15 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                     } else { // 응답이 실패했을 때
                         showToast(getString(R.string.something_wrong_happened))
                     }
-                    binding.circularProgressBar.visibility = View.GONE
+                    binding.progressBarVisible = false
                 }
 
                 override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
-                    binding.circularProgressBar.visibility = View.GONE
+                    binding.progressBarVisible = false
                     call.cancel()
                     when (t) {
                         is IOException -> {
-                            binding.imageViewWifiOff.visibility = View.VISIBLE
+                            binding.wifiImageVisible = true
                             showToast(getString(R.string.there_is_no_interent))
                         }
                         else -> {
@@ -124,8 +129,8 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                 }
 
             })
-        } else {
-            binding.circularProgressBar.visibility = View.GONE
+        } else { // 검색창이 비어있을 때
+            binding.progressBarVisible = false
             showToast(getString(R.string.please_input_keyword))
         }
     }

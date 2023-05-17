@@ -5,9 +5,23 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="homeEventAction"
             type="com.hongstudio.parsing_github_repositories.view.HomeEventAction" />
+
+        <variable
+            name="wifiImageVisible"
+            type="Boolean" />
+
+        <variable
+            name="progressBarVisible"
+            type="Boolean" />
+
+        <variable
+            name="recyclerViewVisible"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingHorizontal="8dp"
-            android:visibility="invisible"
+            android:visibility="@{recyclerViewVisible ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +75,7 @@
             android:id="@+id/circular_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="@{progressBarVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +86,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/wifi_off"
-            android:visibility="gone"
+            android:visibility="@{wifiImageVisible ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
