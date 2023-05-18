@@ -31,13 +31,13 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
         if (repositoryItem != null) {
             binding.apply {
                 repositoryName = repositoryItem?.repositoryName
-                ownerName = repositoryItem?.owner?.ownerName
+                ownerName = repositoryItem?.owner?.name
                 forksCount = repositoryItem?.forksCount
                 watchersCount = repositoryItem?.watchersCount
                 starsCount = repositoryItem?.starsCount
                 repositoryDescription = repositoryItem?.repositoryDescription
                 repositoryUrl = repositoryItem?.repositoryUrl
-                Glide.with(this@DetailActivity).load(repositoryItem?.owner?.ownerImageUrl).into(imageViewOwner)
+                Glide.with(this@DetailActivity).load(repositoryItem?.owner?.imageUrl).into(imageViewOwner)
 
                 detailScreenEventAction = this@DetailActivity
                 textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG

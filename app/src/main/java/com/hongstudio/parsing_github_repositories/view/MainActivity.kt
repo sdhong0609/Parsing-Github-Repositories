@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                                 repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
                                     repositoryItem = RepositoryItemModel(
                                         repositoryName = item.repositoryName,
-                                        owner = OwnerModel(ownerName = item.owner.ownerName, ownerImageUrl = item.owner.ownerImageUrl),
+                                        owner = OwnerModel(name = item.owner.name, imageUrl = item.owner.imageUrl),
                                         repositoryDescription = item.repositoryDescription,
                                         starsCount = item.starsCount,
                                         watchersCount = item.watchersCount,

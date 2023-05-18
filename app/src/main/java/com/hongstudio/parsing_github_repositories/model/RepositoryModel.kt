@@ -31,7 +31,7 @@ data class RepositoryItemModel(
 @Parcelize
 data class OwnerModel(
     @SerializedName("login")
-    val ownerName: String,
+    val name: String,
     @SerializedName("avatar_url")
-    val ownerImageUrl: String,
+    val imageUrl: String,
 ): Parcelable
