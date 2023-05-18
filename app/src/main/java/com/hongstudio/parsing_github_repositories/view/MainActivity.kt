@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBinding
-import com.hongstudio.parsing_github_repositories.model.OwnerModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.service.RetrofitClient.githubRepositoryService
@@ -27,7 +26,6 @@ import java.io.IOException
 class MainActivity : AppCompatActivity(), HomeEventAction {
     private lateinit var binding: ActivityMainBinding
     private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
-    private lateinit var repositoryItem: RepositoryItemModel
     private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
     private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
     private val inputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
@@ -81,20 +79,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                         val searchedResult = response.body()
                         if (searchedResult?.items != null) { // 검색결과가 null이 아닐 때
                             if (searchedResult.items.isNotEmpty()) { // 검색결과가 존재할 때
-                                repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter { item ->
-                                    repositoryItem = RepositoryItemModel(
-                                        repositoryName = item.repositoryName,
-                                        owner = OwnerModel(name = item.owner.name, imageUrl = item.owner.imageUrl),
-                                        repositoryDescription = item.repositoryDescription,
-                                        starsCount = item.starsCount,
-                                        watchersCount = item.watchersCount,
-                                        forksCount = item.forksCount,
-                                        repositoryUrl = item.repositoryUrl
-                                    )
-                                    val intent = Intent(this@MainActivity, DetailActivity::class.java)
-                                    intent.putExtra("repositoryItem", repositoryItem)
-                                    this@MainActivity.startActivity(intent)
-                                }
+                                repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
 
                                 binding.recyclerViewRepositories.apply {
                                     adapter = repositoryRecyclerViewAdapter
@@ -134,6 +119,12 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
             binding.progressBarVisible = false
             showToast(R.string.please_input_keyword)
         }
+    }
+
+    private fun onRepositoryItemClick(item: RepositoryItemModel) {
+        val intent = Intent(this@MainActivity, DetailActivity::class.java)
+        intent.putExtra("repositoryItem", item)
+        this@MainActivity.startActivity(intent)
     }
 
     private fun showToast(@StringRes resId: Int) {
