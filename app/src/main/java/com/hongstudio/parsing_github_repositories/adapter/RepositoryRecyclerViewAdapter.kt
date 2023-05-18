@@ -5,11 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.hongstudio.parsing_github_repositories.databinding.ItemRepositoryBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 
-class RepositoryRecyclerViewAdapter(private val onRepositoryItemClick: (RepositoryItemModel) -> Unit) :
+class RepositoryRecyclerViewAdapter(private val onRepositoryItemClick: (item: RepositoryItemModel) -> Unit) :
     ListAdapter<RepositoryItemModel, RepositoryRecyclerViewAdapter.RepositoryItemViewHolder>(ItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryItemViewHolder {
@@ -34,7 +33,6 @@ class RepositoryRecyclerViewAdapter(private val onRepositoryItemClick: (Reposito
 
         fun bind(item: RepositoryItemModel) {
             binding.item = item
-            Glide.with(itemView).load(item.owner.ownerImageUrl).into(binding.imageViewOwner)
         }
     }
 }

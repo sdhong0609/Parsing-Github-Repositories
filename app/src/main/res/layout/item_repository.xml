@@ -19,6 +19,7 @@
             android:id="@+id/imageView_owner"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            app:imageUrl="@{item.owner.ownerImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
