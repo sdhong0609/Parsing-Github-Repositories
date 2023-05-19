@@ -55,7 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="58dp"
                 android:layout_weight="1"
-                android:onClick="@{homeEventAction.onSearchButtonClick}"
+                android:onClick="@{homeEventAction::onSearchButtonClick}"
                 android:text="@string/search_korean" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
