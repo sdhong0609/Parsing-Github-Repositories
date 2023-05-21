@@ -25,14 +25,14 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity(), HomeEventAction {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var repositoryRecyclerViewAdapter: RepositoryRecyclerViewAdapter
-    private val linearLayoutManager = LinearLayoutManager(this@MainActivity)
-    private val dividerItemDecoration by lazy { DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL) }
-    private val inputMethodManager by lazy { getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager }
+    private lateinit var inputMethodManager: InputMethodManager
+    private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
         binding.apply {
             homeEventAction = this@MainActivity
             wifiImageVisible = false
@@ -50,6 +50,13 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                 }
             }
         }
+
+        binding.recyclerViewRepositories.apply {
+            adapter = this@MainActivity.adapter
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+        }
+
     }
 
     override fun onSearchButtonClick(view: View) {
@@ -79,14 +86,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                         val searchedResult = response.body()
                         if (searchedResult?.items != null) { // 검색결과가 null이 아닐 때
                             if (searchedResult.items.isNotEmpty()) { // 검색결과가 존재할 때
-                                repositoryRecyclerViewAdapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
-
-                                binding.recyclerViewRepositories.apply {
-                                    adapter = repositoryRecyclerViewAdapter
-                                    layoutManager = linearLayoutManager
-                                    addItemDecoration(dividerItemDecoration)
-                                }
-                                repositoryRecyclerViewAdapter.submitList(searchedResult.items)
+                                adapter.submitList(searchedResult.items)
                                 binding.recyclerViewVisible = true
                             } else { // 검색결과가 존재하지 않을 때
                                 showToast(R.string.there_is_no_result)
@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
                             binding.wifiImageVisible = true
                             showToast(R.string.there_is_no_interent)
                         }
+
                         else -> {
                             showToast(R.string.something_wrong_happened)
                         }
