@@ -64,62 +64,68 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     }
 
     private fun searchRepositoriesAction() {
+        val keyword = binding.editTextSearch.text.toString().trim()
+        if (keyword.isEmpty()) {
+            showToast(R.string.please_input_keyword)
+            return
+        }
         binding.apply {
             inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
             wifiImageVisible = false
             progressBarVisible = true
             recyclerViewVisible = false
-            loadRepositoriesData(editTextSearch.text.toString())
+            loadRepositoriesData(keyword)
         }
     }
 
     private fun loadRepositoriesData(keyword: String) {
-        if (keyword.trim().isNotEmpty()) { // 검색창이 비어있지 않을 때
-            val searchedRepositoryListCall = githubRepositoryService.getSearchedRepositoryList(keyword)
-
-            searchedRepositoryListCall.enqueue(object : Callback<RepositoryListModel> {
-                override fun onResponse(
+        val call = githubRepositoryService.getSearchedRepositoryList(keyword)
+        call.enqueue(object : Callback<RepositoryListModel> {
+            override fun onResponse(
                     call: Call<RepositoryListModel>,
                     response: Response<RepositoryListModel>
-                ) {
-                    if (response.isSuccessful) { // 응답이 성공했을 때
-                        val searchedResult = response.body()
-                        if (searchedResult?.items != null) { // 검색결과가 null이 아닐 때
-                            if (searchedResult.items.isNotEmpty()) { // 검색결과가 존재할 때
-                                adapter.submitList(searchedResult.items)
-                                binding.recyclerViewVisible = true
-                            } else { // 검색결과가 존재하지 않을 때
-                                showToast(R.string.there_is_no_result)
-                            }
-                        } else { // 검색결과가 null일 때
-                            showToast(R.string.something_wrong_happened)
-                        }
-                    } else { // 응답이 실패했을 때
+            ) {
+                onLoadRepositoriesSuccess(response)
+            }
+
+            override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
+                binding.progressBarVisible = false
+                when (t) {
+                    is IOException -> {
+                        binding.wifiImageVisible = true
+                        showToast(R.string.there_is_no_interent)
+                    }
+
+                    else -> {
                         showToast(R.string.something_wrong_happened)
                     }
-                    binding.progressBarVisible = false
                 }
+            }
 
-                override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
-                    binding.progressBarVisible = false
-                    call.cancel()
-                    when (t) {
-                        is IOException -> {
-                            binding.wifiImageVisible = true
-                            showToast(R.string.there_is_no_interent)
-                        }
+        })
+    }
 
-                        else -> {
-                            showToast(R.string.something_wrong_happened)
-                        }
-                    }
-                }
+    private fun onLoadRepositoriesSuccess(response: Response<RepositoryListModel>) {
+        binding.progressBarVisible = false
 
-            })
-        } else { // 검색창이 비어있을 때
-            binding.progressBarVisible = false
-            showToast(R.string.please_input_keyword)
+        if (!response.isSuccessful) {
+            showToast(R.string.something_wrong_happened)
+            return
         }
+
+        val searchedResult = response.body()
+        if (searchedResult?.items == null) {
+            showToast(R.string.something_wrong_happened)
+            return
+        }
+
+        if (searchedResult.items.isEmpty()) {
+            showToast(R.string.there_is_no_result)
+            return
+        }
+
+        adapter.submitList(searchedResult.items)
+        binding.recyclerViewVisible = true
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
