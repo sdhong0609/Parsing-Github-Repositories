@@ -9,7 +9,7 @@
 
         <variable
             name="homeEventAction"
-            type="com.hongstudio.parsing_github_repositories.view.HomeEventAction" />
+            type="com.hongstudio.parsing_github_repositories.view.HomeScreenEventAction" />
 
         <variable
             name="wifiImageVisible"
@@ -55,7 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="58dp"
                 android:layout_weight="1"
-                android:onClick="@{homeEventAction::onSearchButtonClick}"
+                android:onClick="@{() -> homeEventAction.onSearchButtonClick()}"
                 android:text="@string/search_korean" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -69,13 +69,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_search" />
+            app:layout_constraintTop_toBottomOf="@id/layout_search"
+            tools:listitem="@layout/item_repository" />
 
         <ProgressBar
             android:id="@+id/circular_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{progressBarVisible ? View.VISIBLE : View.GONE}"
+            app:isVisible="@{progressBarVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/wifi_off"
-            android:visibility="@{wifiImageVisible ? View.VISIBLE : View.GONE}"
+            app:isVisible="@{wifiImageVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

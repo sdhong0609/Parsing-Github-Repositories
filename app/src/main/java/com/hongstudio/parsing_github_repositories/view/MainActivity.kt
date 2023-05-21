@@ -3,7 +3,6 @@ package com.hongstudio.parsing_github_repositories.view
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -23,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), HomeEventAction {
+class MainActivity : AppCompatActivity(), HomeScreenEventAction {
     private lateinit var binding: ActivityMainBinding
     private lateinit var inputMethodManager: InputMethodManager
     private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
 
     }
 
-    override fun onSearchButtonClick(view: View) {
+    override fun onSearchButtonClick() {
         searchRepositoriesAction()
     }
 
@@ -82,8 +81,8 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
         val call = githubRepositoryService.getSearchedRepositoryList(keyword)
         call.enqueue(object : Callback<RepositoryListModel> {
             override fun onResponse(
-                    call: Call<RepositoryListModel>,
-                    response: Response<RepositoryListModel>
+                call: Call<RepositoryListModel>,
+                response: Response<RepositoryListModel>
             ) {
                 onLoadRepositoriesSuccess(response)
             }
@@ -129,13 +128,13 @@ class MainActivity : AppCompatActivity(), HomeEventAction {
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
-        val intent = Intent(this@MainActivity, DetailActivity::class.java)
+        val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra("repositoryItem", item)
-        this@MainActivity.startActivity(intent)
+        startActivity(intent)
     }
 
     private fun showToast(@StringRes resId: Int) {
-        Toast.makeText(this@MainActivity, resId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 
 }

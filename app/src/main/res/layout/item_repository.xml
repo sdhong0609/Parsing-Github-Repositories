@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{String.format(@string/owner_with_value, item.owner.name)}"
+            android:text='@{@string/owner_with_value(item.owner.name), default = ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_fork"
@@ -58,7 +58,7 @@
             android:id="@+id/textView_fork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/fork_with_value, item.forksCount)}"
+            android:text='@{@string/fork_with_value(item.forksCount), default = ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_watchers"
@@ -70,7 +70,7 @@
             android:id="@+id/textView_watchers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/watcher_with_value, item.watchersCount)}"
+            android:text='@{@string/watcher_with_value(item.watchersCount), default = ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_stars"
@@ -82,7 +82,7 @@
             android:id="@+id/textView_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/star_with_value, item.starsCount)}"
+            android:text='@{@string/star_with_value(item.starsCount), default = ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_description"

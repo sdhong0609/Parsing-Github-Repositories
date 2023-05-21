@@ -17,8 +17,7 @@ class RepositoryRecyclerViewAdapter(private val onRepositoryItemClick: (item: Re
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                val item = getItem(position)
-                onRepositoryItemClick(item)
+                onRepositoryItemClick(getItem(position))
             }
         }
         return viewHolder
