@@ -1,37 +1,41 @@
 package com.hongstudio.parsing_github_repositories.model
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Parcelize
+@Serializable
 data class RepositoryListModel(
-    @SerializedName("items")
-    val items: List<RepositoryItemModel>?
-): Parcelable
+    @SerialName("items")
+    val items: List<RepositoryItemModel>
+) : Parcelable
 
 @Parcelize
+@Serializable
 data class RepositoryItemModel(
-    @SerializedName("name")
+    @SerialName("name")
     val repositoryName: String,
-    @SerializedName("owner")
+    @SerialName("owner")
     val owner: OwnerModel,
-    @SerializedName("description")
-    val repositoryDescription: String,
-    @SerializedName("stargazers_count")
+    @SerialName("description")
+    val repositoryDescription: String = "",
+    @SerialName("stargazers_count")
     val starsCount: Int,
-    @SerializedName("watchers_count")
+    @SerialName("watchers_count")
     val watchersCount: Int,
-    @SerializedName("forks_count")
+    @SerialName("forks_count")
     val forksCount: Int,
-    @SerializedName("html_url")
+    @SerialName("html_url")
     val repositoryUrl: String,
-): Parcelable
+) : Parcelable
 
 @Parcelize
+@Serializable
 data class OwnerModel(
-    @SerializedName("login")
+    @SerialName("login")
     val name: String,
-    @SerializedName("avatar_url")
+    @SerialName("avatar_url")
     val imageUrl: String,
-): Parcelable
+) : Parcelable

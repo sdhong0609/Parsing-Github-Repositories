@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
@@ -35,16 +36,21 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
             }
         } else {
             binding.noDataImageVisible = true
-            Toast.makeText(this, getString(R.string.failed_load_data), Toast.LENGTH_SHORT).show()
+            showToast(R.string.failed_load_data)
         }
     }
 
     override fun onRepositoryLinkClick(url: String) {
         if (!Patterns.WEB_URL.matcher(url).matches()) {
+            showToast(R.string.wrong_web_url)
             return
         }
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(url)
         startActivity(intent)
+    }
+
+    private fun showToast(@StringRes resId: Int) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 }
