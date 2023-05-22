@@ -1,7 +1,6 @@
 package com.hongstudio.parsing_github_repositories.view
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -128,8 +127,7 @@ class MainActivity : AppCompatActivity(), HomeScreenEventAction {
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("repositoryItem", item)
+        val intent = DetailActivity.newIntent(this, item)
         startActivity(intent)
     }
 

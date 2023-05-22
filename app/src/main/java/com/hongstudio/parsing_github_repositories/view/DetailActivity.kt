@@ -1,5 +1,6 @@
 package com.hongstudio.parsing_github_repositories.view
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
@@ -24,9 +25,9 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
         binding.noDataImageVisible = false
 
         repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("repositoryItem", RepositoryItemModel::class.java)
+            intent.getParcelableExtra(EXTRA_REPOSTIROY, RepositoryItemModel::class.java)
         } else {
-            intent.getParcelableExtra("repositoryItem")
+            intent.getParcelableExtra(EXTRA_REPOSTIROY)
         }
         if (repositoryItem != null) {
             binding.apply {
@@ -52,5 +53,15 @@ class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
 
     private fun showToast(@StringRes resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        private const val EXTRA_REPOSTIROY = "EXTRA_REPOSITORY"
+
+        fun newIntent(context: Context, repositoryItem: RepositoryItemModel): Intent {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(EXTRA_REPOSTIROY, repositoryItem)
+            return intent
+        }
     }
 }
