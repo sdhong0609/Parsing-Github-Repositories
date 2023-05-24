@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
-import com.hongstudio.parsing_github_repositories.databinding.ActivityMainBinding
+import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.service.RetrofitClient.githubRepositoryService
@@ -21,18 +21,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), HomeScreenEventAction {
-    private lateinit var binding: ActivityMainBinding
+class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
+    private lateinit var binding: ActivityHomeBinding
     private lateinit var inputMethodManager: InputMethodManager
     private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         binding.apply {
-            homeEventAction = this@MainActivity
+            homeEventAction = this@HomeActivity
             wifiImageVisible = false
             progressBarVisible = false
             recyclerViewVisible = false
@@ -50,9 +50,9 @@ class MainActivity : AppCompatActivity(), HomeScreenEventAction {
         }
 
         binding.recyclerViewRepositories.apply {
-            adapter = this@MainActivity.adapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            addItemDecoration(DividerItemDecoration(this@MainActivity, LinearLayoutManager.VERTICAL))
+            adapter = this@HomeActivity.adapter
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
         }
 
     }
