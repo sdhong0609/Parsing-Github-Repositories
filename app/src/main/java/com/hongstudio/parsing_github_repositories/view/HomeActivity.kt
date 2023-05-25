@@ -8,34 +8,32 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
-import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
-import com.hongstudio.parsing_github_repositories.service.RetrofitClient.githubRepositoryService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
+import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var inputMethodManager: InputMethodManager
+    private lateinit var homeViewModel: HomeViewModel
     private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         binding.apply {
+            viewModel = homeViewModel
+            lifecycleOwner = this@HomeActivity
             homeEventAction = this@HomeActivity
-            wifiImageVisible = false
-            progressBarVisible = false
-            recyclerViewVisible = false
         }
 
         binding.editTextSearch.apply {
@@ -55,6 +53,13 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
             addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
         }
 
+        homeViewModel.error.observe(this, EventObserver { messageId ->
+            showToast(messageId)
+        })
+        homeViewModel.repositoryList.observe(this) { repositoryList ->
+            adapter.submitList(repositoryList)
+        }
+
     }
 
     override fun onSearchButtonClick() {
@@ -63,67 +68,13 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
 
     private fun searchRepositoriesAction() {
         val keyword = binding.editTextSearch.text.toString().trim()
-        if (keyword.isEmpty()) {
-            showToast(R.string.please_input_keyword)
-            return
-        }
-        binding.apply {
-            inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
-            wifiImageVisible = false
-            progressBarVisible = true
-            recyclerViewVisible = false
-            loadRepositoriesData(keyword)
-        }
-    }
+        homeViewModel.searchRepositories(keyword)
 
-    private fun loadRepositoriesData(keyword: String) {
-        val call = githubRepositoryService.getSearchedRepositoryList(keyword)
-        call.enqueue(object : Callback<RepositoryListModel> {
-            override fun onResponse(
-                call: Call<RepositoryListModel>,
-                response: Response<RepositoryListModel>
-            ) {
-                onLoadRepositoriesSuccess(response)
+        if (keyword.isNotEmpty()) {
+            binding.apply {
+                inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
             }
-
-            override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
-                binding.progressBarVisible = false
-                when (t) {
-                    is IOException -> {
-                        binding.wifiImageVisible = true
-                        showToast(R.string.there_is_no_interent)
-                    }
-
-                    else -> {
-                        showToast(R.string.something_wrong_happened)
-                    }
-                }
-            }
-
-        })
-    }
-
-    private fun onLoadRepositoriesSuccess(response: Response<RepositoryListModel>) {
-        binding.progressBarVisible = false
-
-        if (!response.isSuccessful) {
-            showToast(R.string.something_wrong_happened)
-            return
         }
-
-        val searchedResult = response.body()
-        if (searchedResult?.items == null) {
-            showToast(R.string.something_wrong_happened)
-            return
-        }
-
-        if (searchedResult.items.isEmpty()) {
-            showToast(R.string.there_is_no_result)
-            return
-        }
-
-        adapter.submitList(searchedResult.items)
-        binding.recyclerViewVisible = true
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
@@ -134,5 +85,4 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
     private fun showToast(@StringRes resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
-
 }
