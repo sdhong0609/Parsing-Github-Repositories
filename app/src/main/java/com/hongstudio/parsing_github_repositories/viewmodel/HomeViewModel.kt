@@ -29,17 +29,24 @@ class HomeViewModel : ViewModel() {
     private val _repositoryList = MutableLiveData<List<RepositoryItemModel>>()
     val repositoryList: LiveData<List<RepositoryItemModel>> get() = _repositoryList
 
-    fun searchRepositories(keyword: String) {
-        if (keyword.isEmpty()) {
+    private val _hideKeyboard = MutableLiveData<Event<Boolean>>()
+    val hideKeyboard: LiveData<Event<Boolean>> get() = _hideKeyboard
+
+    val keyword = MutableLiveData("")
+
+    fun searchRepositoriesAction() {
+        val searchedWord = keyword.value?.trim() ?: ""
+        if (searchedWord.isEmpty()) {
             _error.value = Event(R.string.please_input_keyword)
             return
         }
 
+        _hideKeyboard.value = Event(true)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
         _recyclerViewVisible.value = false
 
-        loadRepositoriesData(keyword)
+        loadRepositoriesData(searchedWord)
     }
 
     private fun loadRepositoriesData(keyword: String) {

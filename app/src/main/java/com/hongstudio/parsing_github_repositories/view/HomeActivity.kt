@@ -38,7 +38,7 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
         binding.editTextSearch.apply {
             setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchRepositoriesAction()
+                    homeViewModel.searchRepositoriesAction()
                     true
                 } else {
                     false
@@ -58,22 +58,15 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
         homeViewModel.repositoryList.observe(this) { repositoryList ->
             adapter.submitList(repositoryList)
         }
-
+        homeViewModel.hideKeyboard.observe(this, EventObserver { isHidden ->
+            if (isHidden) {
+                inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
+            }
+        })
     }
 
     override fun onSearchButtonClick() {
-        searchRepositoriesAction()
-    }
-
-    private fun searchRepositoriesAction() {
-        val keyword = binding.editTextSearch.text.toString().trim()
-        homeViewModel.searchRepositories(keyword)
-
-        if (keyword.isNotEmpty()) {
-            binding.apply {
-                inputMethodManager.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
-            }
-        }
+        homeViewModel.searchRepositoriesAction()
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
