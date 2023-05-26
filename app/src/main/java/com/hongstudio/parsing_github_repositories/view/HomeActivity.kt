@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
@@ -21,14 +21,13 @@ import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
 class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var inputMethodManager: InputMethodManager
-    private lateinit var homeViewModel: HomeViewModel
     private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
         binding.apply {
             viewModel = homeViewModel
