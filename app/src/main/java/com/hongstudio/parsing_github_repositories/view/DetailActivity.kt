@@ -6,49 +6,57 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
+import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
 
-class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
+class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var repositoryItem: RepositoryItemModel? = null
+    private lateinit var detailViewModel: DetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
-        binding.noDataImageVisible = false
 
         repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_REPOSTIROY, RepositoryItemModel::class.java)
         } else {
             intent.getParcelableExtra(EXTRA_REPOSTIROY)
         }
-        if (repositoryItem != null) {
-            binding.apply {
-                repo = repositoryItem
-                detailScreenEventAction = this@DetailActivity
-                textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-            }
-        } else {
-            binding.noDataImageVisible = true
-            showToast(R.string.failed_load_data)
-        }
-    }
 
-    override fun onRepositoryLinkClick(url: String) {
-        if (!Patterns.WEB_URL.matcher(url).matches()) {
-            showToast(R.string.wrong_web_url)
-            return
+        detailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return DetailViewModel(repositoryItem) as T
+            }
+        })[DetailViewModel::class.java]
+
+        binding.apply {
+            viewModel = detailViewModel
+            lifecycleOwner = this@DetailActivity
+            textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         }
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        startActivity(intent)
+
+        detailViewModel.repoNullCheck()
+
+        detailViewModel.error.observe(this, EventObserver { messageId ->
+            showToast(messageId)
+        })
+        detailViewModel.openRepository.observe(this, EventObserver { opened ->
+            if (opened) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(detailViewModel.repo?.repositoryUrl)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun showToast(@StringRes resId: Int) {

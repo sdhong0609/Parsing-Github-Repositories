@@ -18,7 +18,7 @@ import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
 
-class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
+class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var inputMethodManager: InputMethodManager
     private val adapter = RepositoryRecyclerViewAdapter(::onRepositoryItemClick)
@@ -32,7 +32,6 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
         binding.apply {
             viewModel = homeViewModel
             lifecycleOwner = this@HomeActivity
-            homeEventAction = this@HomeActivity
         }
 
         binding.editTextSearch.apply {
@@ -63,10 +62,6 @@ class HomeActivity : AppCompatActivity(), HomeScreenEventAction {
                 inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
             }
         })
-    }
-
-    override fun onSearchButtonClick() {
-        homeViewModel.searchRepositoriesAction()
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
