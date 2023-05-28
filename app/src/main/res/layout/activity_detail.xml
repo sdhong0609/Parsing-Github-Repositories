@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text='@{@string/owner_with_value(viewModel.repo.owner.name), default = ""}'
+            android:text='@{viewModel.repo != null ? @string/owner_with_value(viewModel.repo.owner.name) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_fork"
@@ -59,7 +59,7 @@
             android:id="@+id/textView_fork"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{@string/fork_with_value(viewModel.repo.forksCount), default = ""}'
+            android:text='@{viewModel.repo != null ? @string/fork_with_value(viewModel.repo.forksCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_watchers"
@@ -71,7 +71,7 @@
             android:id="@+id/textView_watchers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{@string/watcher_with_value(viewModel.repo.watchersCount), default = ""}'
+            android:text='@{viewModel.repo != null ? @string/watcher_with_value(viewModel.repo.watchersCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_stars"
@@ -83,7 +83,7 @@
             android:id="@+id/textView_stars"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text='@{@string/star_with_value(viewModel.repo.starsCount), default = ""}'
+            android:text='@{viewModel.repo != null ? @string/star_with_value(viewModel.repo.starsCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@id/textView_description"
