@@ -4,11 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.hongstudio.parsing_github_repositories.R
 
 @BindingAdapter("imageUrl")
 fun ImageView.imageUrl(url: String?) {
-    Glide.with(this).load(url).error(R.drawable.no_data).into(this)
+    Glide.with(this).load(url).error(android.R.color.transparent).into(this)
 }
 
 @BindingAdapter("isVisible")
