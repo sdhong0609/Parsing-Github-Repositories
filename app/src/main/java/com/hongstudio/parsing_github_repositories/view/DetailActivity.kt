@@ -6,8 +6,6 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
@@ -15,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
+import com.hongstudio.parsing_github_repositories.util.CommonMethod
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
 
@@ -48,17 +47,13 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.repoNullCheck()
 
         detailViewModel.error.observe(this, EventObserver { messageId ->
-            showToast(messageId)
+            CommonMethod.showToast(this, messageId)
         })
         detailViewModel.openRepository.observe(this, EventObserver {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(detailViewModel.repo?.repositoryUrl)
             startActivity(intent)
         })
-    }
-
-    private fun showToast(@StringRes resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

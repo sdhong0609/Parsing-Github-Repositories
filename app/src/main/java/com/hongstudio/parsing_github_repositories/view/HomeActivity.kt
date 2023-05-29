@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,6 +13,7 @@ import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerViewAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
+import com.hongstudio.parsing_github_repositories.util.CommonMethod
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
 
@@ -52,7 +51,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         homeViewModel.error.observe(this, EventObserver { messageId ->
-            showToast(messageId)
+            CommonMethod.showToast(this, messageId)
         })
         homeViewModel.repositoryList.observe(this) { repositoryList ->
             adapter.submitList(repositoryList)
@@ -67,9 +66,5 @@ class HomeActivity : AppCompatActivity() {
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
         val intent = DetailActivity.newIntent(this, item)
         startActivity(intent)
-    }
-
-    private fun showToast(@StringRes resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
 }
