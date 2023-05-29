@@ -12,8 +12,8 @@ class DetailViewModel(val repo: RepositoryItemModel?) : ViewModel() {
     private val _error = MutableLiveData<Event<Int>>()
     val error: LiveData<Event<Int>> get() = _error
 
-    private val _openRepository = MutableLiveData<Event<Boolean>>()
-    val openRepository: LiveData<Event<Boolean>> get() = _openRepository
+    private val _openRepository = MutableLiveData<Event<Unit>>()
+    val openRepository: LiveData<Event<Unit>> get() = _openRepository
 
     private val _noDataImageVisible = MutableLiveData(false)
     val noDataImageVisible: LiveData<Boolean> get() = _noDataImageVisible
@@ -23,7 +23,7 @@ class DetailViewModel(val repo: RepositoryItemModel?) : ViewModel() {
             _error.value = Event(R.string.wrong_web_url)
             return
         }
-        _openRepository.value = Event(true)
+        _openRepository.value = Event(Unit)
     }
 
     fun repoNullCheck() {

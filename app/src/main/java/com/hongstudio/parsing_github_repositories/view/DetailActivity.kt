@@ -50,12 +50,10 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.error.observe(this, EventObserver { messageId ->
             showToast(messageId)
         })
-        detailViewModel.openRepository.observe(this, EventObserver { opened ->
-            if (opened) {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(detailViewModel.repo?.repositoryUrl)
-                startActivity(intent)
-            }
+        detailViewModel.openRepository.observe(this, EventObserver {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(detailViewModel.repo?.repositoryUrl)
+            startActivity(intent)
         })
     }
 
