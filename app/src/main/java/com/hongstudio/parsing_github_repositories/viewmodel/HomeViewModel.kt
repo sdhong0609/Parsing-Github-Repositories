@@ -26,8 +26,8 @@ class HomeViewModel : ViewModel() {
     private val _repositoryList = MutableLiveData<List<RepositoryItemModel>>()
     val repositoryList: LiveData<List<RepositoryItemModel>> get() = _repositoryList
 
-    private val _hideKeyboard = MutableLiveData<Event<Boolean>>()
-    val hideKeyboard: LiveData<Event<Boolean>> get() = _hideKeyboard
+    private val _hideKeyboard = MutableLiveData<Event<Unit>>()
+    val hideKeyboard: LiveData<Event<Unit>> get() = _hideKeyboard
 
     val keyword = MutableLiveData("")
 
@@ -38,7 +38,7 @@ class HomeViewModel : ViewModel() {
             return
         }
 
-        _hideKeyboard.value = Event(true)
+        _hideKeyboard.value = Event(Unit)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
         _repositoryList.value = emptyList()

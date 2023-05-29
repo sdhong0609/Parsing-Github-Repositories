@@ -56,10 +56,8 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.repositoryList.observe(this) { repositoryList ->
             adapter.submitList(repositoryList)
         }
-        homeViewModel.hideKeyboard.observe(this, EventObserver { isHidden ->
-            if (isHidden) {
-                inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
-            }
+        homeViewModel.hideKeyboard.observe(this, EventObserver {
+            inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
         })
     }
 
