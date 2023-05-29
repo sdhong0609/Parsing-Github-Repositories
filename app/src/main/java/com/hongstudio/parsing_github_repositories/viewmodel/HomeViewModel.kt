@@ -20,9 +20,6 @@ class HomeViewModel : ViewModel() {
     private val _progressBarVisible = MutableLiveData(false)
     val progressBarVisible: LiveData<Boolean> get() = _progressBarVisible
 
-    private val _recyclerViewVisible = MutableLiveData(false)
-    val recyclerViewVisible: LiveData<Boolean> get() = _recyclerViewVisible
-
     private val _error = MutableLiveData<Event<Int>>()
     val error: LiveData<Event<Int>> get() = _error
 
@@ -44,7 +41,7 @@ class HomeViewModel : ViewModel() {
         _hideKeyboard.value = Event(true)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
-        _recyclerViewVisible.value = false
+        _repositoryList.value = emptyList()
 
         loadRepositoriesData(searchedWord)
     }
@@ -96,6 +93,5 @@ class HomeViewModel : ViewModel() {
         }
 
         _repositoryList.value = searchedResult.items
-        _recyclerViewVisible.value = true
     }
 }
