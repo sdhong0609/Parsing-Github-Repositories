@@ -33,14 +33,12 @@ class HomeActivity : AppCompatActivity() {
             lifecycleOwner = this@HomeActivity
         }
 
-        binding.editTextSearch.apply {
-            setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    homeViewModel.searchRepositoriesAction()
-                    true
-                } else {
-                    false
-                }
+        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                homeViewModel.searchRepositoriesAction()
+                true
+            } else {
+                false
             }
         }
 

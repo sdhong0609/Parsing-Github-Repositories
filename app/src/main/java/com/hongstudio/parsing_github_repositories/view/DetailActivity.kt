@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,15 @@ import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var repositoryItem: RepositoryItemModel? = null
-    private lateinit var detailViewModel: DetailViewModel
+    private val detailViewModel: DetailViewModel by viewModels(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return DetailViewModel(repositoryItem) as T
+                }
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +40,6 @@ class DetailActivity : AppCompatActivity() {
         } else {
             intent.getParcelableExtra(EXTRA_REPOSTIROY)
         }
-
-        detailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return DetailViewModel(repositoryItem) as T
-            }
-        })[DetailViewModel::class.java]
 
         binding.apply {
             viewModel = detailViewModel
