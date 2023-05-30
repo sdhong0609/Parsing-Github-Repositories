@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
-import com.hongstudio.parsing_github_repositories.service.RetrofitClient
+import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
 import com.hongstudio.parsing_github_repositories.util.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(private val repoService: GithubRepositoryService) : ViewModel() {
     private val _wifiImageVisible = MutableLiveData(false)
     val wifiImageVisible: LiveData<Boolean> get() = _wifiImageVisible
 
@@ -47,7 +47,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun loadRepositoriesData(keyword: String) {
-        val call = RetrofitClient.githubRepositoryService.getSearchedRepositoryList(keyword)
+        val call = repoService.getSearchedRepositoryList(keyword)
         call.enqueue(object : Callback<RepositoryListModel> {
             override fun onResponse(
                 call: Call<RepositoryListModel>,
