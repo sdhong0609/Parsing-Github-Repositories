@@ -8,28 +8,35 @@ import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.util.Event
 
-class DetailViewModel(val repo: RepositoryItemModel?) : ViewModel() {
+class DetailViewModel : ViewModel() {
     private val _error = MutableLiveData<Event<Int>>()
     val error: LiveData<Event<Int>> get() = _error
 
-    private val _openRepository = MutableLiveData<Event<Unit>>()
-    val openRepository: LiveData<Event<Unit>> get() = _openRepository
+    private val _openRepository = MutableLiveData<Event<String>>()
+    val openRepository: LiveData<Event<String>> get() = _openRepository
 
     private val _noDataImageVisible = MutableLiveData(false)
     val noDataImageVisible: LiveData<Boolean> get() = _noDataImageVisible
 
-    fun onRepositoryLinkClick() {
-        if (!Patterns.WEB_URL.matcher(repo?.repositoryUrl ?: "").matches()) {
-            _error.value = Event(R.string.wrong_web_url)
-            return
-        }
-        _openRepository.value = Event(Unit)
-    }
+    private val _repo = MutableLiveData<RepositoryItemModel>()
+    val repo: LiveData<RepositoryItemModel> = _repo
 
-    fun repoNullCheck() {
+    fun init(repo: RepositoryItemModel?) {
         if (repo == null) {
             _noDataImageVisible.value = true
             _error.value = Event(R.string.failed_load_data)
+            return
         }
+
+        _repo.value = repo
+    }
+
+    fun onRepositoryLinkClick() {
+        val url = _repo.value?.repositoryUrl ?: ""
+        if (!Patterns.WEB_URL.matcher(url).matches()) {
+            _error.value = Event(R.string.wrong_web_url)
+            return
+        }
+        _openRepository.value = Event(url)
     }
 }

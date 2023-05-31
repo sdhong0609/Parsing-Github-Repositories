@@ -9,3 +9,19 @@ interface GithubRepositoryService {
     @GET("search/repositories")
     fun getSearchedRepositoryList(@Query("q") keyword: String): Call<RepositoryListModel>
 }
+
+// presentation layer - view(Activity, Fragment, View), ViewModel
+// domain layer(optional)
+
+// data layer - Repository, Rest API, Local DB, SharedPreference, File, Firebase, etc.
+
+/*
+class ViewModel(
+    val repository: GithubRepository
+    // ....
+) {
+    fun getGithubRepoList() {
+        return repository.getGithubRepoList()
+    }
+}
+ */

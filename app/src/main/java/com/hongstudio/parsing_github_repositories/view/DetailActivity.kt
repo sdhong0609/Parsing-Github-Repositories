@@ -6,54 +6,51 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.util.CommonMethod
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private var repositoryItem: RepositoryItemModel? = null
-    private lateinit var detailViewModel: DetailViewModel
+    private val detailViewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
 
-        repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_REPOSTIROY, RepositoryItemModel::class.java)
-        } else {
-            intent.getParcelableExtra(EXTRA_REPOSTIROY)
-        }
-
-        detailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return DetailViewModel(repositoryItem) as T
-            }
-        })[DetailViewModel::class.java]
-
+        // bidning 초기화
         binding.apply {
             viewModel = detailViewModel
             lifecycleOwner = this@DetailActivity
             textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         }
 
-        detailViewModel.repoNullCheck()
-
+        // 라이브데이터 구독
         detailViewModel.error.observe(this, EventObserver { messageId ->
             CommonMethod.showToast(this, messageId)
         })
-        detailViewModel.openRepository.observe(this, EventObserver {
+        detailViewModel.openRepository.observe(this, EventObserver { url ->
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(detailViewModel.repo?.repositoryUrl)
+            intent.data = Uri.parse(url)
             startActivity(intent)
         })
+
+        // 데이터 파싱
+        val repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_REPOSTIROY, RepositoryItemModel::class.java)
+        } else {
+            intent.getParcelableExtra(EXTRA_REPOSTIROY)
+        }
+
+        detailViewModel.init(repositoryItem)
     }
 
     companion object {

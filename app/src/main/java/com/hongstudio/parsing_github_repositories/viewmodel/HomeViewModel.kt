@@ -4,16 +4,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hongstudio.parsing_github_repositories.R
+import com.hongstudio.parsing_github_repositories.RepoRepository
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.service.RetrofitClient
 import com.hongstudio.parsing_github_repositories.util.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: RepoRepository,
+) : ViewModel() {
     private val _wifiImageVisible = MutableLiveData(false)
     val wifiImageVisible: LiveData<Boolean> get() = _wifiImageVisible
 
