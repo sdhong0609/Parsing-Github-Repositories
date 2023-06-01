@@ -44,6 +44,12 @@ class HomeActivity : AppCompatActivity() {
             lifecycleOwner = this@HomeActivity
         }
 
+        binding.recyclerViewRepositories.apply {
+            adapter = this@HomeActivity.adapter
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
+        }
+
         binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 homeViewModel.searchRepositoriesAction()
@@ -51,12 +57,6 @@ class HomeActivity : AppCompatActivity() {
             } else {
                 false
             }
-        }
-
-        binding.recyclerViewRepositories.apply {
-            adapter = this@HomeActivity.adapter
-            layoutManager = LinearLayoutManager(this@HomeActivity)
-            addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
         }
 
         homeViewModel.error.observe(this, EventObserver { messageId ->
@@ -68,10 +68,13 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.hideKeyboard.observe(this, EventObserver {
             inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
         })
+        homeViewModel.repositoryItemClickEvent.observe(this, EventObserver { item ->
+            val intent = DetailActivity.newIntent(this, item)
+            startActivity(intent)
+        })
     }
 
     private fun onRepositoryItemClick(item: RepositoryItemModel) {
-        val intent = DetailActivity.newIntent(this, item)
-        startActivity(intent)
+        homeViewModel.onRepositoryItemClick(item)
     }
 }

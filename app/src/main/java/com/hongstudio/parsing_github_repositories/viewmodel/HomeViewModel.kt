@@ -29,7 +29,14 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
     private val _hideKeyboard = MutableLiveData<Event<Unit>>()
     val hideKeyboard: LiveData<Event<Unit>> get() = _hideKeyboard
 
+    private val _repositoryItemClickEvent = MutableLiveData<Event<RepositoryItemModel>>()
+    val repositoryItemClickEvent: LiveData<Event<RepositoryItemModel>> get() = _repositoryItemClickEvent
+
     val keyword = MutableLiveData("")
+
+    fun onRepositoryItemClick(item: RepositoryItemModel) {
+        _repositoryItemClickEvent.value = Event(item)
+    }
 
     fun searchRepositoriesAction() {
         val searchedWord = keyword.value?.trim() ?: ""
