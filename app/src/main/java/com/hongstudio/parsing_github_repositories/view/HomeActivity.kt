@@ -16,8 +16,8 @@ import com.hongstudio.parsing_github_repositories.adapter.RepositoryRecyclerView
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.service.RetrofitClient
-import com.hongstudio.parsing_github_repositories.util.CommonMethod
 import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.util.showToast
 import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
 
 class HomeActivity : AppCompatActivity() {
@@ -60,7 +60,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         homeViewModel.error.observe(this, EventObserver { messageId ->
-            CommonMethod.showToast(this, messageId)
+            showToast(messageId)
         })
         homeViewModel.repositoryList.observe(this) { repositoryList ->
             adapter.submitList(repositoryList)

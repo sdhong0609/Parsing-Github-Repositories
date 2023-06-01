@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
 
-object CommonMethod {
-    fun showToast(context: Context, @StringRes resId: Int) {
-        Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
-    }
+fun Context.showToast(@StringRes resId: Int) {
+    Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
 }

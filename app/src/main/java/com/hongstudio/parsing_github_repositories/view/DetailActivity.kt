@@ -12,8 +12,8 @@ import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
-import com.hongstudio.parsing_github_repositories.util.CommonMethod
 import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.util.showToast
 import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
 
 class DetailActivity : AppCompatActivity() {
@@ -40,7 +40,7 @@ class DetailActivity : AppCompatActivity() {
 
         // LiveData 구독
         detailViewModel.error.observe(this, EventObserver { messageId ->
-            CommonMethod.showToast(this, messageId)
+            showToast(messageId)
         })
         detailViewModel.openRepository.observe(this, EventObserver { url ->
             val intent = Intent(Intent.ACTION_VIEW)
