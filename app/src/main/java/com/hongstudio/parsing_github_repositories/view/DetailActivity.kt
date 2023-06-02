@@ -6,53 +6,49 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Patterns
-import android.widget.Toast
-import androidx.annotation.StringRes
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
+import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.util.showToast
+import com.hongstudio.parsing_github_repositories.viewmodel.DetailViewModel
 
-class DetailActivity : AppCompatActivity(), DetailScreenEventAction {
+class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private var repositoryItem: RepositoryItemModel? = null
+    private val detailViewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
-        binding.noDataImageVisible = false
 
-        repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        // binding 초기화
+        binding.apply {
+            viewModel = detailViewModel
+            lifecycleOwner = this@DetailActivity
+            textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        }
+
+        // 데이터 파싱
+        val repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_REPOSTIROY, RepositoryItemModel::class.java)
         } else {
             intent.getParcelableExtra(EXTRA_REPOSTIROY)
         }
-        if (repositoryItem != null) {
-            binding.apply {
-                repo = repositoryItem
-                detailScreenEventAction = this@DetailActivity
-                textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-            }
-        } else {
-            binding.noDataImageVisible = true
-            showToast(R.string.failed_load_data)
-        }
-    }
 
-    override fun onRepositoryLinkClick(url: String) {
-        if (!Patterns.WEB_URL.matcher(url).matches()) {
-            showToast(R.string.wrong_web_url)
-            return
-        }
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(url)
-        startActivity(intent)
-    }
+        // LiveData 구독
+        detailViewModel.error.observe(this, EventObserver { messageId ->
+            showToast(messageId)
+        })
+        detailViewModel.openRepository.observe(this, EventObserver { url ->
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(url)
+            startActivity(intent)
+        })
 
-    private fun showToast(@StringRes resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+        detailViewModel.init(repositoryItem)
     }
 
     companion object {

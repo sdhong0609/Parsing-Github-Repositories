@@ -57,4 +57,9 @@ dependencies {
 
     // kotlinx-serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+
+    implementation 'androidx.activity:activity-ktx:1.7.1'
 }
