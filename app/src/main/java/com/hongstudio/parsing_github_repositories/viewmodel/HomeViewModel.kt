@@ -3,14 +3,14 @@ package com.hongstudio.parsing_github_repositories.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
 import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
 import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
 import com.hongstudio.parsing_github_repositories.util.Event
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class HomeViewModel(private val repoService: GithubRepositoryService) : ViewModel() {
@@ -54,51 +54,34 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
     }
 
     private fun loadRepositoriesData(keyword: String) {
-        val call = repoService.getSearchedRepositoryList(keyword)
-        call.enqueue(object : Callback<RepositoryListModel> {
-            override fun onResponse(
-                call: Call<RepositoryListModel>,
-                response: Response<RepositoryListModel>
-            ) {
-                onLoadRepositoriesSuccess(response)
-            }
+        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, t ->
+            _progressBarVisible.value = false
+            when (t) {
+                is IOException -> {
+                    _wifiImageVisible.value = true
+                    _error.value = Event(R.string.there_is_no_interent)
+                }
 
-            override fun onFailure(call: Call<RepositoryListModel>, t: Throwable) {
-                _progressBarVisible.value = false
-                when (t) {
-                    is IOException -> {
-                        _wifiImageVisible.value = true
-                        _error.value = Event(R.string.there_is_no_interent)
-                    }
-
-                    else -> {
-                        _error.value = Event(R.string.something_wrong_happened)
-                    }
+                else -> {
+                    _error.value = Event(R.string.something_wrong_happened)
                 }
             }
+        }
 
-        })
+        viewModelScope.launch(exceptionHandler) {
+            val list = repoService.getSearchedRepositoryList(keyword)
+            onLoadRepositoriesSuccess(list)
+        }
     }
 
-    private fun onLoadRepositoriesSuccess(response: Response<RepositoryListModel>) {
+    private fun onLoadRepositoriesSuccess(list: RepositoryListModel) {
         _progressBarVisible.value = false
 
-        if (!response.isSuccessful) {
-            _error.value = Event(R.string.something_wrong_happened)
-            return
-        }
-
-        val searchedResult = response.body()
-        if (searchedResult?.items == null) {
-            _error.value = Event(R.string.something_wrong_happened)
-            return
-        }
-
-        if (searchedResult.items.isEmpty()) {
+        if (list.items.isEmpty()) {
             _error.value = Event(R.string.there_is_no_result)
             return
         }
 
-        _repositoryList.value = searchedResult.items
+        _repositoryList.value = list.items
     }
 }
