@@ -28,7 +28,7 @@ class DetailActivity : AppCompatActivity() {
         binding.apply {
             viewModel = detailViewModel
             lifecycleOwner = this@DetailActivity
-            textViewRepositoryUrl.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+            repoUrlTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         }
 
         // 데이터 파싱

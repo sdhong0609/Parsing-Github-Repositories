@@ -17,17 +17,18 @@
         android:layout_height="match_parent"
         android:padding="8dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageView_owner"
+        <ImageView
+            android:id="@+id/ownerImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:importantForAccessibility="no"
             app:imageUrl="@{viewModel.repo.owner.avatarUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textView_repository_name"
+        <TextView
+            android:id="@+id/repoNameTextView"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -35,14 +36,14 @@
             android:text="@{viewModel.repo.name}"
             android:textColor="@color/text_color"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@id/imageView_owner"
+            app:layout_constraintBottom_toBottomOf="@id/ownerImageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageView_owner"
+            app:layout_constraintStart_toEndOf="@id/ownerImageView"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Parsing-Github-Repositories-Seongdeok" />
 
         <TextView
-            android:id="@+id/textView_owner_name"
+            android:id="@+id/ownerNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -50,49 +51,49 @@
             android:text='@{viewModel.repo != null ? @string/owner_with_value(viewModel.repo.owner.name) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/textView_fork"
+            app:layout_constraintBottom_toTopOf="@id/forksCountTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView_owner"
+            app:layout_constraintTop_toBottomOf="@id/ownerImageView"
             tools:text="owner : sdhong0609" />
 
         <TextView
-            android:id="@+id/textView_fork"
+            android:id="@+id/forksCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{viewModel.repo != null ? @string/fork_with_value(viewModel.repo.forksCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/textView_watchers"
+            app:layout_constraintBottom_toTopOf="@id/watchersCountTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_owner_name"
+            app:layout_constraintTop_toBottomOf="@id/ownerNameTextView"
             tools:text="fork : 50" />
 
         <TextView
-            android:id="@+id/textView_watchers"
+            android:id="@+id/watchersCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{viewModel.repo != null ? @string/watcher_with_value(viewModel.repo.watchersCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/textView_stars"
+            app:layout_constraintBottom_toTopOf="@id/starsCountTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_fork"
+            app:layout_constraintTop_toBottomOf="@id/forksCountTextView"
             tools:text="watchers : 50" />
 
         <TextView
-            android:id="@+id/textView_stars"
+            android:id="@+id/starsCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{viewModel.repo != null ? @string/star_with_value(viewModel.repo.starsCount) : ""}'
             android:textColor="@color/text_color"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/textView_description"
+            app:layout_constraintBottom_toTopOf="@id/descriptionTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_watchers"
+            app:layout_constraintTop_toBottomOf="@id/watchersCountTextView"
             tools:text="stars : 50" />
 
         <TextView
-            android:id="@+id/textView_description"
+            android:id="@+id/descriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -100,13 +101,13 @@
             android:text="@{viewModel.repo.description}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/textView_repository_url"
+            app:layout_constraintBottom_toTopOf="@id/repoUrlTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_stars"
+            app:layout_constraintTop_toBottomOf="@id/starsCountTextView"
             tools:text="Description : DescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescriptionDescription" />
 
         <TextView
-            android:id="@+id/textView_repository_url"
+            android:id="@+id/repoUrlTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -117,12 +118,13 @@
             android:textColor="@color/hyperlink_color"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_description"
+            app:layout_constraintTop_toBottomOf="@id/descriptionTextView"
             tools:text="https://github.com/baidu/Cafe" />
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/no_data"
             app:isVisible="@{viewModel.noDataImageVisible}"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -34,15 +34,14 @@ class RepoListAdapter(private val onRepoItemClick: (item: RepoModel) -> Unit) :
             binding.item = item
         }
     }
-}
 
-private class RepoItemDiffCallback : DiffUtil.ItemCallback<RepoModel>() {
-    override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
-        return oldItem.repoUrl == newItem.repoUrl
+    private class RepoItemDiffCallback : DiffUtil.ItemCallback<RepoModel>() {
+        override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
+            return oldItem.repoUrl == newItem.repoUrl
+        }
+
+        override fun areContentsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
+            return oldItem == newItem
+        }
     }
-
-    override fun areContentsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
-        return oldItem == newItem
-    }
-
 }

@@ -44,13 +44,13 @@ class HomeActivity : AppCompatActivity() {
             lifecycleOwner = this@HomeActivity
         }
 
-        binding.recyclerViewRepositories.apply {
+        binding.repoRecyclerView.apply {
             adapter = this@HomeActivity.adapter
             layoutManager = LinearLayoutManager(this@HomeActivity)
             addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
         }
 
-        binding.editTextSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 homeViewModel.searchRepositoriesAction()
                 true
@@ -66,7 +66,7 @@ class HomeActivity : AppCompatActivity() {
             adapter.submitList(list)
         }
         homeViewModel.hideKeyboard.observe(this, EventObserver {
-            inputMethodManager.hideSoftInputFromWindow(binding.editTextSearch.windowToken, 0)
+            inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         })
         homeViewModel.repoItemClickEvent.observe(this, EventObserver { item ->
             val intent = DetailActivity.newIntent(this, item)
