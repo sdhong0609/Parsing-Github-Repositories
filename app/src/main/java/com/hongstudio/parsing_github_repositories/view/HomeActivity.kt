@@ -7,32 +7,23 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepoListAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.model.RepoModel
-import com.hongstudio.parsing_github_repositories.service.RetrofitClient
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.util.showToast
 import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var inputMethodManager: InputMethodManager
     private val adapter = RepoListAdapter(::onRepoItemClick)
-    private val homeViewModel: HomeViewModel by viewModels(
-        factoryProducer = {
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return HomeViewModel(RetrofitClient.githubRepositoryService) as T
-                }
-            }
-        }
-    )
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

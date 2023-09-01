@@ -4,7 +4,7 @@ import com.hongstudio.parsing_github_repositories.model.RepoListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface GithubRepositoryService {
+interface GithubRepoService {
     @GET("search/repositories")
-    suspend fun getSearchedRepositoryList(@Query("q") keyword: String): RepoListModel
+    suspend fun getSearchedRepoList(@Query("q") keyword: String): RepoListModel
 }

@@ -7,13 +7,19 @@ import androidx.lifecycle.viewModelScope
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.model.RepoListModel
 import com.hongstudio.parsing_github_repositories.model.RepoModel
-import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
+import com.hongstudio.parsing_github_repositories.service.GithubRepoService
 import com.hongstudio.parsing_github_repositories.util.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import java.io.IOException
+import javax.inject.Inject
 
-class HomeViewModel(private val repoService: GithubRepositoryService) : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repoService: GithubRepoService
+) : ViewModel() {
+
     private val _wifiImageVisible = MutableLiveData(false)
     val wifiImageVisible: LiveData<Boolean> get() = _wifiImageVisible
 
@@ -69,7 +75,7 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
         }
 
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepositoryList(keyword)
+            val list = repoService.getSearchedRepoList(keyword)
             onLoadRepositoriesSuccess(list)
         }
     }
