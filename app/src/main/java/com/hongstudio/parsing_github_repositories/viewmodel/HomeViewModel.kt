@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.model.RepositoryItemModel
-import com.hongstudio.parsing_github_repositories.model.RepositoryListModel
+import com.hongstudio.parsing_github_repositories.model.RepoListModel
+import com.hongstudio.parsing_github_repositories.model.RepoModel
 import com.hongstudio.parsing_github_repositories.service.GithubRepositoryService
 import com.hongstudio.parsing_github_repositories.util.Event
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -23,19 +23,19 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
     private val _error = MutableLiveData<Event<Int>>()
     val error: LiveData<Event<Int>> get() = _error
 
-    private val _repositoryList = MutableLiveData<List<RepositoryItemModel>>()
-    val repositoryList: LiveData<List<RepositoryItemModel>> get() = _repositoryList
+    private val _repoList = MutableLiveData<List<RepoModel>>()
+    val repoList: LiveData<List<RepoModel>> get() = _repoList
 
     private val _hideKeyboard = MutableLiveData<Event<Unit>>()
     val hideKeyboard: LiveData<Event<Unit>> get() = _hideKeyboard
 
-    private val _repositoryItemClickEvent = MutableLiveData<Event<RepositoryItemModel>>()
-    val repositoryItemClickEvent: LiveData<Event<RepositoryItemModel>> get() = _repositoryItemClickEvent
+    private val _repoItemClickEvent = MutableLiveData<Event<RepoModel>>()
+    val repoItemClickEvent: LiveData<Event<RepoModel>> get() = _repoItemClickEvent
 
     val keyword = MutableLiveData("")
 
-    fun onRepositoryItemClick(item: RepositoryItemModel) {
-        _repositoryItemClickEvent.value = Event(item)
+    fun onRepoItemClick(item: RepoModel) {
+        _repoItemClickEvent.value = Event(item)
     }
 
     fun searchRepositoriesAction() {
@@ -48,13 +48,13 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
         _hideKeyboard.value = Event(Unit)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
-        _repositoryList.value = emptyList()
+        _repoList.value = emptyList()
 
         loadRepositoriesData(searchedWord)
     }
 
     private fun loadRepositoriesData(keyword: String) {
-        val exceptionHandler = CoroutineExceptionHandler { coroutineContext, t ->
+        val exceptionHandler = CoroutineExceptionHandler { _, t ->
             _progressBarVisible.value = false
             when (t) {
                 is IOException -> {
@@ -74,7 +74,7 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
         }
     }
 
-    private fun onLoadRepositoriesSuccess(list: RepositoryListModel) {
+    private fun onLoadRepositoriesSuccess(list: RepoListModel) {
         _progressBarVisible.value = false
 
         if (list.items.isEmpty()) {
@@ -82,6 +82,6 @@ class HomeViewModel(private val repoService: GithubRepositoryService) : ViewMode
             return
         }
 
-        _repositoryList.value = list.items
+        _repoList.value = list.items
     }
 }

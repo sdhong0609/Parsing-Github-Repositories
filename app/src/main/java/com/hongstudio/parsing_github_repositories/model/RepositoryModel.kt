@@ -7,20 +7,20 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
-data class RepositoryListModel(
+data class RepoListModel(
     @SerialName("items")
-    val items: List<RepositoryItemModel>
+    val items: List<RepoModel>
 ) : Parcelable
 
 @Parcelize
 @Serializable
-data class RepositoryItemModel(
+data class RepoModel(
     @SerialName("name")
-    val repositoryName: String,
+    val name: String,
     @SerialName("owner")
     val owner: OwnerModel,
     @SerialName("description")
-    val repositoryDescription: String = "",
+    val description: String = "",
     @SerialName("stargazers_count")
     val starsCount: Int,
     @SerialName("watchers_count")
@@ -28,7 +28,7 @@ data class RepositoryItemModel(
     @SerialName("forks_count")
     val forksCount: Int,
     @SerialName("html_url")
-    val repositoryUrl: String,
+    val repoUrl: String,
 ) : Parcelable
 
 @Parcelize
@@ -37,5 +37,5 @@ data class OwnerModel(
     @SerialName("login")
     val name: String,
     @SerialName("avatar_url")
-    val imageUrl: String,
+    val avatarUrl: String,
 ) : Parcelable

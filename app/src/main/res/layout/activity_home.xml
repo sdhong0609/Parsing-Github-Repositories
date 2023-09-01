@@ -58,7 +58,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_search"
-            tools:listitem="@layout/item_repository" />
+            tools:listitem="@layout/item_repo" />
 
         <ProgressBar
             android:id="@+id/circular_progress_bar"

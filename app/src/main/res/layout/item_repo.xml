@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.hongstudio.parsing_github_repositories.model.RepositoryItemModel" />
+            type="com.hongstudio.parsing_github_repositories.model.RepoModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             android:id="@+id/imageView_owner"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            app:imageUrl="@{item.owner.imageUrl}"
+            app:imageUrl="@{item.owner.avatarUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_launcher_background" />
@@ -31,7 +31,7 @@
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{item.repositoryName}"
+            android:text="@{item.name}"
             android:textColor="@color/text_color"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@id/imageView_owner"
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{item.repositoryDescription}"
+            android:text="@{item.description}"
             android:textColor="@color/text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
