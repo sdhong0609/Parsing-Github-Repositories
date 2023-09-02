@@ -42,6 +42,7 @@ class DetailActivity : AppCompatActivity() {
         detailViewModel.error.observe(this, EventObserver { messageId ->
             showToast(messageId)
         })
+
         detailViewModel.openRepoUrlEvent.observe(this, EventObserver { url ->
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(url)

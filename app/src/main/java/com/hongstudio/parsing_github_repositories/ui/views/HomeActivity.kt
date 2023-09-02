@@ -70,7 +70,7 @@ class HomeActivity : AppCompatActivity() {
             adapter.submitList(list)
         }
 
-        homeViewModel.hideKeyboard.observe(this, EventObserver {
+        homeViewModel.hideKeyboardEvent.observe(this, EventObserver {
             inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         })
 

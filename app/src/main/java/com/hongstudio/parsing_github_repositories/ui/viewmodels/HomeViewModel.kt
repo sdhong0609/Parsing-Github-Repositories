@@ -33,8 +33,8 @@ class HomeViewModel @Inject constructor(
     private val _repoList = MutableLiveData<List<RepoModel>>()
     val repoList: LiveData<List<RepoModel>> get() = _repoList
 
-    private val _hideKeyboard = MutableLiveData<Event<Unit>>()
-    val hideKeyboard: LiveData<Event<Unit>> get() = _hideKeyboard
+    private val _hideKeyboardEvent = MutableLiveData<Event<Unit>>()
+    val hideKeyboardEvent: LiveData<Event<Unit>> get() = _hideKeyboardEvent
 
     private val _repoItemClickEvent = MutableLiveData<Event<RepoModel>>()
     val repoItemClickEvent: LiveData<Event<RepoModel>> get() = _repoItemClickEvent
@@ -74,7 +74,7 @@ class HomeViewModel @Inject constructor(
             return
         }
 
-        _hideKeyboard.value = Event(Unit)
+        _hideKeyboardEvent.value = Event(Unit)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
         _repoList.value = emptyList()
