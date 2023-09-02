@@ -16,31 +16,31 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
+sealed interface HomeEvent {
+    data class Error(val messageRes: Int) : HomeEvent
+    data class RepoItemClick(val item: RepoModel) : HomeEvent
+    object HideKeyboard : HomeEvent
+}
+
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repoService: GithubRepoService
 ) : ViewModel() {
 
     private val _wifiImageVisible = MutableLiveData(false)
-    val wifiImageVisible: LiveData<Boolean> get() = _wifiImageVisible
+    val wifiImageVisible: LiveData<Boolean> = _wifiImageVisible
 
     private val _progressBarVisible = MutableLiveData(false)
-    val progressBarVisible: LiveData<Boolean> get() = _progressBarVisible
-
-    private val _error = MutableLiveData<Event<Int>>()
-    val error: LiveData<Event<Int>> get() = _error
+    val progressBarVisible: LiveData<Boolean> = _progressBarVisible
 
     private val _repoList = MutableLiveData<List<RepoModel>>()
-    val repoList: LiveData<List<RepoModel>> get() = _repoList
-
-    private val _hideKeyboardEvent = MutableLiveData<Event<Unit>>()
-    val hideKeyboardEvent: LiveData<Event<Unit>> get() = _hideKeyboardEvent
-
-    private val _repoItemClickEvent = MutableLiveData<Event<RepoModel>>()
-    val repoItemClickEvent: LiveData<Event<RepoModel>> get() = _repoItemClickEvent
+    val repoList: LiveData<List<RepoModel>> = _repoList
 
     private val _keyword = MutableLiveData("")
-    val keyword: LiveData<String> get() = _keyword
+    val keyword: LiveData<String> = _keyword
+
+    private val _homeEvent = MutableLiveData<Event<HomeEvent>>()
+    val homeEvent: LiveData<Event<HomeEvent>> = _homeEvent
 
     private var searchedWord = ""
     private var page = INITIAL_PAGE
@@ -50,11 +50,11 @@ class HomeViewModel @Inject constructor(
         when (t) {
             is IOException -> {
                 _wifiImageVisible.value = true
-                _error.value = Event(R.string.there_is_no_interent)
+                _homeEvent.value = Event(HomeEvent.Error(R.string.there_is_no_interent))
             }
 
             else -> {
-                _error.value = Event(R.string.something_wrong_happened)
+                _homeEvent.value = Event(HomeEvent.Error(R.string.something_wrong_happened))
             }
         }
     }
@@ -64,17 +64,17 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onRepoItemClick(item: RepoModel) {
-        _repoItemClickEvent.value = Event(item)
+        _homeEvent.value = Event(HomeEvent.RepoItemClick(item))
     }
 
     fun searchRepositoriesAction() {
         searchedWord = _keyword.value?.trim() ?: ""
         if (searchedWord.isEmpty()) {
-            _error.value = Event(R.string.please_input_keyword)
+            _homeEvent.value = Event(HomeEvent.Error(R.string.please_input_keyword))
             return
         }
 
-        _hideKeyboardEvent.value = Event(Unit)
+        _homeEvent.value = Event(HomeEvent.HideKeyboard)
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
         _repoList.value = emptyList()
@@ -94,7 +94,7 @@ class HomeViewModel @Inject constructor(
         _progressBarVisible.value = false
 
         if (list.items.isEmpty()) {
-            _error.value = Event(R.string.there_is_no_result)
+            _homeEvent.value = Event(HomeEvent.Error(R.string.there_is_no_result))
             return
         }
 

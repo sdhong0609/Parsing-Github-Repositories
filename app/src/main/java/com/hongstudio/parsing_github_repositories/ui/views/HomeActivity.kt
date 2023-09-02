@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
+import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeViewModel
 import com.hongstudio.parsing_github_repositories.util.EventObserver
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
@@ -62,21 +63,18 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        homeViewModel.error.observe(this, EventObserver { messageId ->
-            showToast(messageId)
-        })
-
         homeViewModel.repoList.observe(this) { list ->
             adapter.submitList(list)
         }
 
-        homeViewModel.hideKeyboardEvent.observe(this, EventObserver {
-            inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
-        })
-
-        homeViewModel.repoItemClickEvent.observe(this, EventObserver { item ->
-            val intent = DetailActivity.newIntent(this, item)
-            startActivity(intent)
+        homeViewModel.homeEvent.observe(this, EventObserver { event ->
+            when (event) {
+                is HomeEvent.Error -> showToast(event.messageRes)
+                is HomeEvent.RepoItemClick -> startActivity(DetailActivity.newIntent(this, event.item))
+                HomeEvent.HideKeyboard -> {
+                    inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
+                }
+            }
         })
     }
 

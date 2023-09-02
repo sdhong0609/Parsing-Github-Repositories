@@ -10,13 +10,13 @@ import com.hongstudio.parsing_github_repositories.util.Event
 
 class DetailViewModel : ViewModel() {
     private val _error = MutableLiveData<Event<Int>>()
-    val error: LiveData<Event<Int>> get() = _error
+    val error: LiveData<Event<Int>> = _error
 
     private val _openRepoUrlEvent = MutableLiveData<Event<String>>()
-    val openRepoUrlEvent: LiveData<Event<String>> get() = _openRepoUrlEvent
+    val openRepoUrlEvent: LiveData<Event<String>> = _openRepoUrlEvent
 
     private val _noDataImageVisible = MutableLiveData(false)
-    val noDataImageVisible: LiveData<Boolean> get() = _noDataImageVisible
+    val noDataImageVisible: LiveData<Boolean> = _noDataImageVisible
 
     private val _repo = MutableLiveData<RepoModel>()
     val repo: LiveData<RepoModel> = _repo
