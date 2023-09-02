@@ -1,5 +1,6 @@
-package com.hongstudio.parsing_github_repositories.service
+package com.hongstudio.parsing_github_repositories.di
 
+import com.hongstudio.parsing_github_repositories.api.GithubRepoService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

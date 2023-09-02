@@ -1,12 +1,12 @@
-package com.hongstudio.parsing_github_repositories.adapter
+package com.hongstudio.parsing_github_repositories.ui.views
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ItemRepoBinding
-import com.hongstudio.parsing_github_repositories.model.RepoModel
 
 class RepoListAdapter(private val onRepoItemClick: (item: RepoModel) -> Unit) :
     ListAdapter<RepoModel, RepoListAdapter.RepoItemViewHolder>(RepoItemDiffCallback()) {

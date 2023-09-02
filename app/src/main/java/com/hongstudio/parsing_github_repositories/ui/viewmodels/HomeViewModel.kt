@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.viewmodel
+package com.hongstudio.parsing_github_repositories.ui.viewmodels
 
 import android.text.Editable
 import androidx.lifecycle.LiveData
@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.model.RepoListModel
-import com.hongstudio.parsing_github_repositories.model.RepoModel
-import com.hongstudio.parsing_github_repositories.service.GithubRepoService
+import com.hongstudio.parsing_github_repositories.api.GithubRepoService
+import com.hongstudio.parsing_github_repositories.data.remote.RepoListModel
+import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler

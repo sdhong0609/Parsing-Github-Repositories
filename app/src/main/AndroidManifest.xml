@@ -15,10 +15,10 @@
         android:theme="@style/Theme.ParsingGithubRepositories"
         tools:targetApi="31">
         <activity
-            android:name=".view.DetailActivity"
+            android:name=".ui.views.DetailActivity"
             android:exported="false" />
         <activity
-            android:name=".view.HomeActivity"
+            android:name=".ui.views.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

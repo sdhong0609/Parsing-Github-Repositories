@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.view
+package com.hongstudio.parsing_github_repositories.ui.views
 
 import android.content.Context
 import android.os.Bundle
@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.adapter.RepoListAdapter
+import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
-import com.hongstudio.parsing_github_repositories.model.RepoModel
+import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeViewModel
 import com.hongstudio.parsing_github_repositories.util.EventObserver
-import com.hongstudio.parsing_github_repositories.util.showToast
-import com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel
+import com.hongstudio.parsing_github_repositories.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

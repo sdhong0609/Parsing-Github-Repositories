@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.model
+package com.hongstudio.parsing_github_repositories.data.remote
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

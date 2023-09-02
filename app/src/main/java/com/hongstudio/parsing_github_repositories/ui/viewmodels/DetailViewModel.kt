@@ -1,11 +1,11 @@
-package com.hongstudio.parsing_github_repositories.viewmodel
+package com.hongstudio.parsing_github_repositories.ui.viewmodels
 
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.model.RepoModel
+import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
 
 class DetailViewModel : ViewModel() {

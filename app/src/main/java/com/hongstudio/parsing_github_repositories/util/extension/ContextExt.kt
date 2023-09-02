@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.util
+package com.hongstudio.parsing_github_repositories.util.extension
 
 import android.content.Context
 import android.widget.Toast

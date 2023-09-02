@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="com.hongstudio.parsing_github_repositories.viewmodel.HomeViewModel" />
+            type="com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.HomeActivity">
+        tools:context=".ui.views.HomeActivity">
 
         <LinearLayout
             android:id="@+id/searchLayout"

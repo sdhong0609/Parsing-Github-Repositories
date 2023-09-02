@@ -1,6 +1,6 @@
-package com.hongstudio.parsing_github_repositories.service
+package com.hongstudio.parsing_github_repositories.api
 
-import com.hongstudio.parsing_github_repositories.model.RepoListModel
+import com.hongstudio.parsing_github_repositories.data.remote.RepoListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
