@@ -1,5 +1,6 @@
 package com.hongstudio.parsing_github_repositories.viewmodel
 
+import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,14 +39,36 @@ class HomeViewModel @Inject constructor(
     private val _repoItemClickEvent = MutableLiveData<Event<RepoModel>>()
     val repoItemClickEvent: LiveData<Event<RepoModel>> get() = _repoItemClickEvent
 
-    val keyword = MutableLiveData("")
+    private val _keyword = MutableLiveData("")
+    val keyword: LiveData<String> get() = _keyword
+
+    private var searchedWord = ""
+    private var page = INITIAL_PAGE
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, t ->
+        _progressBarVisible.value = false
+        when (t) {
+            is IOException -> {
+                _wifiImageVisible.value = true
+                _error.value = Event(R.string.there_is_no_interent)
+            }
+
+            else -> {
+                _error.value = Event(R.string.something_wrong_happened)
+            }
+        }
+    }
+
+    fun afterKeywordTextChanged(editable: Editable?) {
+        _keyword.value = editable.toString()
+    }
 
     fun onRepoItemClick(item: RepoModel) {
         _repoItemClickEvent.value = Event(item)
     }
 
     fun searchRepositoriesAction() {
-        val searchedWord = keyword.value?.trim() ?: ""
+        searchedWord = _keyword.value?.trim() ?: ""
         if (searchedWord.isEmpty()) {
             _error.value = Event(R.string.please_input_keyword)
             return
@@ -55,32 +78,19 @@ class HomeViewModel @Inject constructor(
         _wifiImageVisible.value = false
         _progressBarVisible.value = true
         _repoList.value = emptyList()
+        page = INITIAL_PAGE
 
-        loadRepositoriesData(searchedWord)
+        loadRepoListData()
     }
 
-    private fun loadRepositoriesData(keyword: String) {
-        val exceptionHandler = CoroutineExceptionHandler { _, t ->
-            _progressBarVisible.value = false
-            when (t) {
-                is IOException -> {
-                    _wifiImageVisible.value = true
-                    _error.value = Event(R.string.there_is_no_interent)
-                }
-
-                else -> {
-                    _error.value = Event(R.string.something_wrong_happened)
-                }
-            }
-        }
-
+    private fun loadRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(keyword)
-            onLoadRepositoriesSuccess(list)
+            val list = repoService.getSearchedRepoList(searchedWord, page)
+            onLoadRepoListSuccess(list)
         }
     }
 
-    private fun onLoadRepositoriesSuccess(list: RepoListModel) {
+    private fun onLoadRepoListSuccess(list: RepoListModel) {
         _progressBarVisible.value = false
 
         if (list.items.isEmpty()) {
@@ -89,5 +99,16 @@ class HomeViewModel @Inject constructor(
         }
 
         _repoList.value = list.items
+    }
+
+    fun loadMoreRepoListData() {
+        viewModelScope.launch(exceptionHandler) {
+            val list = repoService.getSearchedRepoList(searchedWord, ++page)
+            _repoList.value = _repoList.value?.plus(list.items)
+        }
+    }
+
+    companion object {
+        private const val INITIAL_PAGE = 1
     }
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.adapter.RepoListAdapter
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
@@ -37,8 +38,20 @@ class HomeActivity : AppCompatActivity() {
 
         binding.repoRecyclerView.apply {
             adapter = this@HomeActivity.adapter
-            layoutManager = LinearLayoutManager(this@HomeActivity)
             addItemDecoration(DividerItemDecoration(this@HomeActivity, LinearLayoutManager.VERTICAL))
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lastVisibleItemPosition =
+                        (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
+                    val itemTotalCount = recyclerView.adapter!!.itemCount - 1
+
+                    if (!recyclerView.canScrollVertically(1) && lastVisibleItemPosition == itemTotalCount) {
+                        homeViewModel.loadMoreRepoListData()
+                    }
+                }
+            })
         }
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -53,12 +66,15 @@ class HomeActivity : AppCompatActivity() {
         homeViewModel.error.observe(this, EventObserver { messageId ->
             showToast(messageId)
         })
+
         homeViewModel.repoList.observe(this) { list ->
             adapter.submitList(list)
         }
+
         homeViewModel.hideKeyboard.observe(this, EventObserver {
             inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         })
+
         homeViewModel.repoItemClickEvent.observe(this, EventObserver { item ->
             val intent = DetailActivity.newIntent(this, item)
             startActivity(intent)

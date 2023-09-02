@@ -6,5 +6,5 @@ import retrofit2.http.Query
 
 interface GithubRepoService {
     @GET("search/repositories")
-    suspend fun getSearchedRepoList(@Query("q") keyword: String): RepoListModel
+    suspend fun getSearchedRepoList(@Query("q") keyword: String, @Query("page") page: Int): RepoListModel
 }
