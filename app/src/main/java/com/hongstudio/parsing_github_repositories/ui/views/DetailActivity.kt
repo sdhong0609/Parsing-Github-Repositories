@@ -12,8 +12,9 @@ import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
+import com.hongstudio.parsing_github_repositories.ui.viewmodels.DetailEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodels.DetailViewModel
-import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.util.extension.eventObserve
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
 
 class DetailActivity : AppCompatActivity() {
@@ -39,15 +40,12 @@ class DetailActivity : AppCompatActivity() {
         }
 
         // LiveData 구독
-        detailViewModel.error.observe(this, EventObserver { messageId ->
-            showToast(messageId)
-        })
-
-        detailViewModel.openRepoUrlEvent.observe(this, EventObserver { url ->
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            startActivity(intent)
-        })
+        detailViewModel.detailEvent.eventObserve(this) { event ->
+            when (event) {
+                is DetailEvent.Error -> showToast(event.messageRes)
+                is DetailEvent.OpenRepoUrl -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(event.url)))
+            }
+        }
 
         detailViewModel.init(repositoryItem)
     }

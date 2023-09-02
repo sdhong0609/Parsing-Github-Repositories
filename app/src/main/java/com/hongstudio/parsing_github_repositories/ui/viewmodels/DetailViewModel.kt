@@ -8,12 +8,12 @@ import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
 
-class DetailViewModel : ViewModel() {
-    private val _error = MutableLiveData<Event<Int>>()
-    val error: LiveData<Event<Int>> = _error
+sealed interface DetailEvent {
+    data class Error(val messageRes: Int) : DetailEvent
+    data class OpenRepoUrl(val url: String) : DetailEvent
+}
 
-    private val _openRepoUrlEvent = MutableLiveData<Event<String>>()
-    val openRepoUrlEvent: LiveData<Event<String>> = _openRepoUrlEvent
+class DetailViewModel : ViewModel() {
 
     private val _noDataImageVisible = MutableLiveData(false)
     val noDataImageVisible: LiveData<Boolean> = _noDataImageVisible
@@ -21,10 +21,13 @@ class DetailViewModel : ViewModel() {
     private val _repo = MutableLiveData<RepoModel>()
     val repo: LiveData<RepoModel> = _repo
 
+    private val _detailEvent = MutableLiveData<Event<DetailEvent>>()
+    val detailEvent: LiveData<Event<DetailEvent>> = _detailEvent
+
     fun init(repo: RepoModel?) {
         if (repo == null) {
             _noDataImageVisible.value = true
-            _error.value = Event(R.string.failed_load_data)
+            _detailEvent.value = Event(DetailEvent.Error(R.string.failed_load_data))
             return
         }
 
@@ -34,9 +37,9 @@ class DetailViewModel : ViewModel() {
     fun onRepositoryLinkClick() {
         val url = _repo.value?.repoUrl ?: ""
         if (!Patterns.WEB_URL.matcher(url).matches()) {
-            _error.value = Event(R.string.wrong_web_url)
+            _detailEvent.value = Event(DetailEvent.Error(R.string.wrong_web_url))
             return
         }
-        _openRepoUrlEvent.value = Event(url)
+        _detailEvent.value = Event(DetailEvent.OpenRepoUrl(url))
     }
 }

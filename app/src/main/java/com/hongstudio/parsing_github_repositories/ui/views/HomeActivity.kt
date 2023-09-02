@@ -15,7 +15,7 @@ import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeViewModel
-import com.hongstudio.parsing_github_repositories.util.EventObserver
+import com.hongstudio.parsing_github_repositories.util.extension.eventObserve
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,7 +67,7 @@ class HomeActivity : AppCompatActivity() {
             adapter.submitList(list)
         }
 
-        homeViewModel.homeEvent.observe(this, EventObserver { event ->
+        homeViewModel.homeEvent.eventObserve(this) { event ->
             when (event) {
                 is HomeEvent.Error -> showToast(event.messageRes)
                 is HomeEvent.RepoItemClick -> startActivity(DetailActivity.newIntent(this, event.item))
@@ -75,7 +75,7 @@ class HomeActivity : AppCompatActivity() {
                     inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
                 }
             }
-        })
+        }
     }
 
     private fun onRepoItemClick(item: RepoModel) {
