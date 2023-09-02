@@ -85,7 +85,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, page)
+            val list = repoService.getSearchedRepoList(searchedWord, page, PER_PAGE)
             onLoadRepoListSuccess(list)
         }
     }
@@ -103,12 +103,13 @@ class HomeViewModel @Inject constructor(
 
     fun loadMoreRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, ++page)
+            val list = repoService.getSearchedRepoList(searchedWord, ++page, PER_PAGE)
             _repoList.value = _repoList.value?.plus(list.items)
         }
     }
 
     companion object {
         private const val INITIAL_PAGE = 1
+        private const val PER_PAGE = 10
     }
 }
