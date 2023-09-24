@@ -7,7 +7,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -22,11 +25,23 @@ object NetworkModule {
         coerceInputValues = true
     }
 
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private fun provideOkHttpClient(vararg interceptors: Interceptor): OkHttpClient = OkHttpClient.Builder().run {
+        interceptors.forEach {
+            addInterceptor(it)
+        }
+        build()
+    }
+
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(json.asConverterFactory(MediaType.get(contentType)))
+        .client(provideOkHttpClient(loggingInterceptor))
+        .addConverterFactory(json.asConverterFactory(contentType.toMediaType()))
         .build()
 
     @Singleton
