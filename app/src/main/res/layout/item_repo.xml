@@ -19,7 +19,7 @@
             android:id="@+id/ownerImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/profile_image"
             app:imageUrl="@{item.owner.avatarUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

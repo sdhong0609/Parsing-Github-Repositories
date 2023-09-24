@@ -21,7 +21,7 @@
             android:id="@+id/ownerImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/profile_image"
             app:imageUrl="@{viewModel.repo.owner.avatarUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -124,7 +124,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/no_data_image"
             android:src="@drawable/no_data"
             app:isVisible="@{viewModel.noDataImageVisible}"
             app:layout_constraintBottom_toBottomOf="parent"

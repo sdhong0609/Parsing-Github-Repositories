@@ -35,9 +35,9 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="4"
                 android:afterTextChanged="@{viewModel::afterKeywordTextChanged}"
+                android:autofillHints="@string/search"
                 android:hint="@string/search"
                 android:imeOptions="actionSearch"
-                android:importantForAutofill="no"
                 android:inputType="text"
                 android:text="@{viewModel.keyword}" />
 
@@ -77,7 +77,7 @@
             android:id="@+id/noWifiImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:importantForAccessibility="no"
+            android:contentDescription="@string/no_wifi_image"
             android:src="@drawable/wifi_off"
             app:isVisible="@{viewModel.wifiImageVisible}"
             app:layout_constraintBottom_toBottomOf="parent"
