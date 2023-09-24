@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.ui.views
+package com.hongstudio.parsing_github_repositories.ui.view
 
 import android.content.Context
 import android.content.Intent
@@ -12,8 +12,8 @@ import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
-import com.hongstudio.parsing_github_repositories.ui.viewmodels.DetailEvent
-import com.hongstudio.parsing_github_repositories.ui.viewmodels.DetailViewModel
+import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailEvent
+import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailViewModel
 import com.hongstudio.parsing_github_repositories.util.extension.eventObserve
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
 

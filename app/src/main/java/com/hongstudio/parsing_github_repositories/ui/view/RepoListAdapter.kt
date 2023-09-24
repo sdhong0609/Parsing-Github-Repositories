@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.ui.views
+package com.hongstudio.parsing_github_repositories.ui.view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.hongstudio.parsing_github_repositories.ui.viewmodels.DetailViewModel" />
+            type="com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

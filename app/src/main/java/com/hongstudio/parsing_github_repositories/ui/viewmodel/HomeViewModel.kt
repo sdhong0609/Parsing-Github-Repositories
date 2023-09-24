@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.ui.viewmodels
+package com.hongstudio.parsing_github_repositories.ui.viewmodel
 
 import android.text.Editable
 import androidx.lifecycle.LiveData

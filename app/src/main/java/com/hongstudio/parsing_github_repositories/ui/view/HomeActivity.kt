@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.ui.views
+package com.hongstudio.parsing_github_repositories.ui.view
 
 import android.content.Context
 import android.os.Bundle
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
-import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeEvent
-import com.hongstudio.parsing_github_repositories.ui.viewmodels.HomeViewModel
+import com.hongstudio.parsing_github_repositories.ui.viewmodel.HomeEvent
+import com.hongstudio.parsing_github_repositories.ui.viewmodel.HomeViewModel
 import com.hongstudio.parsing_github_repositories.util.extension.eventObserve
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
 import dagger.hilt.android.AndroidEntryPoint

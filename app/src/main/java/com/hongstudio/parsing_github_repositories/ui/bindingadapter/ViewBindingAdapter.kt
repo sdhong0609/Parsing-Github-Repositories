@@ -1,4 +1,4 @@
-package com.hongstudio.parsing_github_repositories.ui.bindingadapters
+package com.hongstudio.parsing_github_repositories.ui.bindingadapter
 
 import android.view.View
 import androidx.databinding.BindingAdapter
