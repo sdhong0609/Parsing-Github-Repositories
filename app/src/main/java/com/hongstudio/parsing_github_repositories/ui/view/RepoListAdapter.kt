@@ -32,6 +32,7 @@ class RepoListAdapter(private val onRepoItemClick: (item: RepoModel) -> Unit) :
 
         fun bind(item: RepoModel) {
             binding.item = item
+            binding.executePendingBindings()
         }
     }
 
