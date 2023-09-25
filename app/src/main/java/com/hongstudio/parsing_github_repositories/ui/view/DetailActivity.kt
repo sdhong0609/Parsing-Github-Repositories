@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityDetailBinding
 import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailViewModel

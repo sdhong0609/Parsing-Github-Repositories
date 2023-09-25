@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
 
 sealed interface DetailEvent {

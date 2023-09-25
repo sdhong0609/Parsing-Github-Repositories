@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ItemRepoBinding
 
 class RepoListAdapter(private val onRepoItemClick: (item: RepoModel) -> Unit) :

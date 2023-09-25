@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.hongstudio.parsing_github_repositories.data.remote.RepoModel" />
+            type="com.hongstudio.parsing_github_repositories.data.local.RepoModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

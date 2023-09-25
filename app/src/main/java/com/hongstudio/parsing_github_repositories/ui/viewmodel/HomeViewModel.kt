@@ -7,9 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hongstudio.parsing_github_repositories.R
 import com.hongstudio.parsing_github_repositories.api.GithubRepoService
-import com.hongstudio.parsing_github_repositories.data.remote.RepoListModel
-import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoListModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
+import com.hongstudio.parsing_github_repositories.util.extension.toLocalModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -85,7 +86,7 @@ class HomeViewModel @Inject constructor(
 
     private fun loadRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, page, PER_PAGE)
+            val list = repoService.getSearchedRepoList(searchedWord, page, PER_PAGE).toLocalModel()
             onLoadRepoListSuccess(list)
         }
     }
@@ -103,7 +104,7 @@ class HomeViewModel @Inject constructor(
 
     fun loadMoreRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, ++page, PER_PAGE)
+            val list = repoService.getSearchedRepoList(searchedWord, ++page, PER_PAGE).toLocalModel()
             _repoList.value = _repoList.value?.plus(list.items)
         }
     }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hongstudio.parsing_github_repositories.R
-import com.hongstudio.parsing_github_repositories.data.remote.RepoModel
+import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.databinding.ActivityHomeBinding
 import com.hongstudio.parsing_github_repositories.ui.viewmodel.HomeEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodel.HomeViewModel
