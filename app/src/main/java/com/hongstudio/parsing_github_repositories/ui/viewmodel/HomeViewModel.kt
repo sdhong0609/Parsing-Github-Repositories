@@ -55,6 +55,7 @@ class HomeViewModel @Inject constructor(
             }
 
             else -> {
+                _wifiImageVisible.value = false
                 _homeEvent.value = Event(HomeEvent.Error(R.string.something_wrong_happened))
             }
         }
