@@ -14,6 +14,7 @@ import com.hongstudio.parsing_github_repositories.util.extension.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -51,6 +52,7 @@ class HomeViewModel @Inject constructor(
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
         _progressBarVisible.value = false
+        Timber.e(t)
         when (t) {
             is IOException -> {
                 _wifiImageVisible.value = true
