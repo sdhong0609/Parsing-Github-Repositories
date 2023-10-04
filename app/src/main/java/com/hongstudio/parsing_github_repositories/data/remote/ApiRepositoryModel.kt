@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiRepoListModel(
+    @SerialName("total_count")
+    val totalCount: Long,
     @SerialName("items")
     val items: List<ApiRepoModel>
 )

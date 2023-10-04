@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class RepoListModel(
+    val totalCount: Long,
     val items: List<RepoModel>
 ) : Parcelable
 

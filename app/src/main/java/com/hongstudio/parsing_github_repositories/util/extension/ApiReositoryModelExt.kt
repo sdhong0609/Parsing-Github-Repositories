@@ -7,16 +7,17 @@ import com.hongstudio.parsing_github_repositories.data.remote.ApiOwnerModel
 import com.hongstudio.parsing_github_repositories.data.remote.ApiRepoListModel
 import com.hongstudio.parsing_github_repositories.data.remote.ApiRepoModel
 
-fun ApiRepoListModel.toLocalModel(): RepoListModel {
+fun ApiRepoListModel.toModel(): RepoListModel {
     return RepoListModel(
-        items = items.map { it.toLocalModel() }
+        totalCount = totalCount,
+        items = items.map { it.toModel() }
     )
 }
 
-fun ApiRepoModel.toLocalModel(): RepoModel {
+fun ApiRepoModel.toModel(): RepoModel {
     return RepoModel(
         name = name,
-        owner = owner.toLocalModel(),
+        owner = owner.toModel(),
         description = description,
         starsCount = starsCount,
         watchersCount = watchersCount,
@@ -25,7 +26,7 @@ fun ApiRepoModel.toLocalModel(): RepoModel {
     )
 }
 
-fun ApiOwnerModel.toLocalModel(): OwnerModel {
+fun ApiOwnerModel.toModel(): OwnerModel {
     return OwnerModel(
         name = name,
         avatarUrl = avatarUrl,

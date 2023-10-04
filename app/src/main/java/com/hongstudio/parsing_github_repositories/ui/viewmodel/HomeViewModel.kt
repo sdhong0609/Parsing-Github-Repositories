@@ -10,7 +10,7 @@ import com.hongstudio.parsing_github_repositories.api.GithubRepoService
 import com.hongstudio.parsing_github_repositories.data.local.RepoListModel
 import com.hongstudio.parsing_github_repositories.data.local.RepoModel
 import com.hongstudio.parsing_github_repositories.util.Event
-import com.hongstudio.parsing_github_repositories.util.extension.toLocalModel
+import com.hongstudio.parsing_github_repositories.util.extension.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
@@ -21,6 +21,7 @@ sealed interface HomeEvent {
     data class Error(val messageRes: Int) : HomeEvent
     data class RepoItemClick(val item: RepoModel) : HomeEvent
     object HideKeyboard : HomeEvent
+    object LastPage : HomeEvent
 }
 
 @HiltViewModel
@@ -45,6 +46,8 @@ class HomeViewModel @Inject constructor(
 
     private var searchedWord = ""
     private var page = INITIAL_PAGE
+    private var currentListCount = 0L
+    private var totalCount = 0L
 
     private val exceptionHandler = CoroutineExceptionHandler { _, t ->
         _progressBarVisible.value = false
@@ -61,7 +64,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun afterKeywordTextChanged(editable: Editable?) {
+    fun afterKeywordTextChanged(editable: Editable) {
         _keyword.value = editable.toString()
     }
 
@@ -81,32 +84,41 @@ class HomeViewModel @Inject constructor(
         _progressBarVisible.value = true
         _repoList.value = emptyList()
         page = INITIAL_PAGE
+        currentListCount = 0L
+        totalCount = 0L
 
         loadRepoListData()
     }
 
     private fun loadRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, page, PER_PAGE).toLocalModel()
-            onLoadRepoListSuccess(list)
+            val response = repoService.getSearchedRepoList(searchedWord, page, PER_PAGE).toModel()
+            onLoadRepoListSuccess(response)
         }
     }
 
-    private fun onLoadRepoListSuccess(list: RepoListModel) {
+    private fun onLoadRepoListSuccess(response: RepoListModel) {
         _progressBarVisible.value = false
 
-        if (list.items.isEmpty()) {
+        if (response.items.isEmpty()) {
             _homeEvent.value = Event(HomeEvent.Error(R.string.there_is_no_result))
             return
         }
 
-        _repoList.value = list.items
+        _repoList.value = response.items
+        currentListCount = response.items.size.toLong()
+        totalCount = response.totalCount
     }
 
     fun loadMoreRepoListData() {
         viewModelScope.launch(exceptionHandler) {
-            val list = repoService.getSearchedRepoList(searchedWord, ++page, PER_PAGE).toLocalModel()
-            _repoList.value = _repoList.value?.plus(list.items)
+            if (currentListCount >= totalCount) {
+                _homeEvent.value = Event(HomeEvent.LastPage)
+                return@launch
+            }
+            val response = repoService.getSearchedRepoList(searchedWord, ++page, PER_PAGE).toModel()
+            _repoList.value = _repoList.value?.plus(response.items)
+            currentListCount += response.items.size
         }
     }
 

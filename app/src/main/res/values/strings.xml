@@ -12,6 +12,7 @@
     <string name="there_is_no_interent">인터넷이 연결되어 있지 않습니다</string>
     <string name="failed_load_data">데이터 불러오기를 실패했습니다</string>
     <string name="wrong_web_url">잘못된 웹 주소 형식입니다</string>
+    <string name="last_page">마지막 페이지입니다</string>
 
     <!-- Content Description -->
     <string name="profile_image">프로필 이미지</string>

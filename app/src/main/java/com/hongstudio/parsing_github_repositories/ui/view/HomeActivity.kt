@@ -43,6 +43,8 @@ class HomeActivity : AppCompatActivity() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
 
+                    if (dy <= 0) return
+
                     val lastVisibleItemPosition =
                         (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
                     val itemTotalCount = recyclerView.adapter!!.itemCount - 1
@@ -74,6 +76,8 @@ class HomeActivity : AppCompatActivity() {
                 HomeEvent.HideKeyboard -> {
                     inputMethodManager.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
                 }
+
+                HomeEvent.LastPage -> showToast(R.string.last_page)
             }
         }
     }
