@@ -16,7 +16,9 @@ import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailEvent
 import com.hongstudio.parsing_github_repositories.ui.viewmodel.DetailViewModel
 import com.hongstudio.parsing_github_repositories.util.extension.eventObserve
 import com.hongstudio.parsing_github_repositories.util.extension.showToast
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private val detailViewModel: DetailViewModel by viewModels()
@@ -39,6 +41,10 @@ class DetailActivity : AppCompatActivity() {
             intent.getParcelableExtra(EXTRA_REPOSTIROY)
         }
 
+        // SavedStateHandle에 데이터 저장 및 null 체크
+        detailViewModel.savedStateHandle[REPO_KEY] = repositoryItem
+        detailViewModel.checkRepoItemNull()
+
         // LiveData 구독
         detailViewModel.detailEvent.eventObserve(this) { event ->
             when (event) {
@@ -46,12 +52,11 @@ class DetailActivity : AppCompatActivity() {
                 is DetailEvent.OpenRepoUrl -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(event.url)))
             }
         }
-
-        detailViewModel.init(repositoryItem)
     }
 
     companion object {
         private const val EXTRA_REPOSTIROY = "EXTRA_REPOSITORY"
+        private const val REPO_KEY = "REPO_KEY"
 
         fun newIntent(context: Context, repoItem: RepoModel): Intent {
             val intent = Intent(context, DetailActivity::class.java)
