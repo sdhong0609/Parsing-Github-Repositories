@@ -19,6 +19,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val baseUrl = "https://api.github.com/"
     private const val contentType = "application/json"
+    private const val authToken = "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"
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -27,6 +28,13 @@ object NetworkModule {
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val authInterceptor = Interceptor { chain ->
+        val newRequest = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer $authToken")
+            .build()
+        chain.proceed(newRequest)
     }
 
     private fun provideOkHttpClient(vararg interceptors: Interceptor): OkHttpClient = OkHttpClient.Builder().run {
@@ -40,7 +48,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .client(provideOkHttpClient(loggingInterceptor))
+        .client(provideOkHttpClient(loggingInterceptor, authInterceptor))
         .addConverterFactory(json.asConverterFactory(contentType.toMediaType()))
         .build()
 
