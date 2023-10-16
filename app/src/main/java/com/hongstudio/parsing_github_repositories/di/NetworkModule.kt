@@ -19,7 +19,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val baseUrl = "https://api.github.com/"
     private const val contentType = "application/json"
-    private const val authToken = "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"
+    private const val authToken = "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"
 
     private val json = Json {
         ignoreUnknownKeys = true
