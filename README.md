@@ -1,6 +1,3 @@
-
-![github](https://github.com/sdhong0609/Parsing-Github-Repositories/assets/78577085/6a94374e-22f0-4ebd-9b29-26faf881f00c)
-
 # 💡 Topic
 
 - **GitHub Repository를 검색하고 간략한 정보를 보여주는 서비스**
