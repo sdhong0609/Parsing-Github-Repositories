@@ -70,7 +70,7 @@
 # 📺 Demo Video
 
 <div align="center">
-  <video src="https://github.com/sdhong0609/Parsing-Github-Repositories/assets/78577085/98a8e6d3-dda7-4de8-a162-8cda76bf355e" width="400" />
+  <video src="https://github.com/sdhong0609/Parsing-Github-Repositories/assets/78577085/98a8e6d3-dda7-4de8-a162-8cda76bf355e" />
 </div>
 
 
