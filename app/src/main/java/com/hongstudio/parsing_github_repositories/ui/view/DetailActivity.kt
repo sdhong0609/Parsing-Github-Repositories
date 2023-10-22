@@ -34,17 +34,6 @@ class DetailActivity : AppCompatActivity() {
             repoUrlTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         }
 
-        // 데이터 파싱
-        val repositoryItem = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_REPOSTIROY, RepoModel::class.java)
-        } else {
-            intent.getParcelableExtra(EXTRA_REPOSTIROY)
-        }
-
-        // SavedStateHandle에 데이터 저장 및 null 체크
-        detailViewModel.savedStateHandle[REPO_KEY] = repositoryItem
-        detailViewModel.checkRepoItemNull()
-
         // LiveData 구독
         detailViewModel.detailEvent.eventObserve(this) { event ->
             when (event) {
@@ -55,12 +44,11 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_REPOSTIROY = "EXTRA_REPOSITORY"
         private const val REPO_KEY = "REPO_KEY"
 
         fun newIntent(context: Context, repoItem: RepoModel): Intent {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra(EXTRA_REPOSTIROY, repoItem)
+            intent.putExtra(REPO_KEY, repoItem)
             return intent
         }
     }

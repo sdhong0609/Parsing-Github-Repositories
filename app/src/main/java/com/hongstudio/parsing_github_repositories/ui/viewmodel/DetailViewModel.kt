@@ -18,7 +18,7 @@ sealed interface DetailEvent {
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _noDataImageVisible = MutableLiveData(false)
@@ -27,14 +27,7 @@ class DetailViewModel @Inject constructor(
     private val _detailEvent = MutableLiveData<Event<DetailEvent>>()
     val detailEvent: LiveData<Event<DetailEvent>> = _detailEvent
 
-    val repo = savedStateHandle.getLiveData<RepoModel?>(REPO_KEY, null)
-
-    fun checkRepoItemNull() {
-        if (repo.value == null) {
-            _noDataImageVisible.value = true
-            _detailEvent.value = Event(DetailEvent.Error(R.string.failed_load_data))
-        }
-    }
+    val repo = savedStateHandle.getLiveData<RepoModel>(REPO_KEY)
 
     fun onRepositoryLinkClick() {
         val url = repo.value?.repoUrl ?: ""
