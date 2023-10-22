@@ -31,6 +31,11 @@ class HomeActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        setupView()
+        observeViewModel()
+    }
+
+    private fun setupView() {
         binding.apply {
             viewModel = homeViewModel
             lifecycleOwner = this@HomeActivity
@@ -64,7 +69,9 @@ class HomeActivity : AppCompatActivity() {
                 false
             }
         }
+    }
 
+    private fun observeViewModel() {
         homeViewModel.repoList.observe(this) { list ->
             adapter.submitList(list)
         }

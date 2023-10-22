@@ -27,14 +27,19 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_detail)
 
-        // binding 초기화
+        setupView()
+        observeViewModel()
+    }
+
+    private fun setupView() {
         binding.apply {
             viewModel = detailViewModel
             lifecycleOwner = this@DetailActivity
             repoUrlTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         }
+    }
 
-        // LiveData 구독
+    private fun observeViewModel() {
         detailViewModel.detailEvent.eventObserve(this) { event ->
             when (event) {
                 is DetailEvent.Error -> showToast(event.messageRes)
