@@ -66,8 +66,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun afterKeywordTextChanged(editable: Editable) {
-        _keyword.value = editable.toString()
+    fun afterKeywordTextChanged(keyword: String) {
+        _keyword.value = keyword
     }
 
     fun onRepoItemClick(item: RepoModel) {
