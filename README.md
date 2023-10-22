@@ -53,11 +53,13 @@
 - RecyclerView 초기화 시 scroll listener의 `onScrolled()` 함수가 실행되어, 실제로는 스크롤을 하지 않았는데 스크롤을 했을 때와 동일하게 작동하는 문제가 발생함.
 - `onScrolled()` 함수의 파라미터로 `dy: Int` 를 발견함. 이 값은 수직방향으로 실제 스크롤한 길이를 나타내는 값.
 - `if (dy <= 0) return` 코드를 `onScrolled()` 최상단에 추가하여, 실제 스크롤이 발생하지 않으면 return하여 함수 진행을 종료시킴으로써 해결.
+<br>
 
 📌 **GitHub REST API 403 오류 발생**
 - 구글링 결과 Personal Access Token을 HTTP Header에 추가해야 api를 원활하게 사용할 수 있다는 것을 알게 되었음. Token을 추가하지 않으면 api를 제한적으로만 사용 가능함.
 - Token을 HTTP Header에 추가하였고 정상 작동함을 확인.
-- 하지만 토큰은 개인 정보이기 때문에, commit 및 push하면 **GitHub에서 감지 후 토큰을 삭제해버리는 문제**가 발생하여 **현재 해결 시도중** → “Personal Access Token을 받아오는 REST API는 없을까?”
+- 하지만 Token은 개인 정보이기 때문에, commit 및 push하면 **GitHub에서 감지 후 Token을 삭제해버리는 문제**가 발생
+- `local.properties` 에 Token을 추가하여 해결 → API Key, Token 등 **노출되면 안되는 정보를 안전하게 관리하는 방법**을 알게 됨.
 
 <br>
 
