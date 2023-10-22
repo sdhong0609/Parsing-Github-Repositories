@@ -27,10 +27,11 @@ class DetailViewModel @Inject constructor(
     private val _detailEvent = MutableLiveData<Event<DetailEvent>>()
     val detailEvent: LiveData<Event<DetailEvent>> = _detailEvent
 
-    val repo = savedStateHandle.getLiveData<RepoModel>(REPO_KEY)
+    private val _repo = savedStateHandle.getLiveData<RepoModel>(REPO_KEY)
+    val repo: LiveData<RepoModel> = _repo
 
     fun onRepositoryLinkClick() {
-        val url = repo.value?.repoUrl ?: ""
+        val url = _repo.value?.repoUrl ?: ""
         if (!Patterns.WEB_URL.matcher(url).matches()) {
             _detailEvent.value = Event(DetailEvent.Error(R.string.wrong_web_url))
             return
