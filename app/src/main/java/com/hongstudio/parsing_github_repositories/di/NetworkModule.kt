@@ -1,5 +1,6 @@
 package com.hongstudio.parsing_github_repositories.di
 
+import com.hongstudio.parsing_github_repositories.BuildConfig
 import com.hongstudio.parsing_github_repositories.api.GithubRepoService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -29,17 +30,12 @@ object NetworkModule {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    /*
-     TODO: GitHub Personal Access Token을 직접 코드에 작성하면 GitHub가 commit 내용 중 token이 있다는 것을 감지하여
-      해당 token을 revoke(폐지)하고 새로운 token을 발급해야 한다고 경고를 보낸다.
-      따라서 token을 어떻게 하면 직접 작성하지 않고 Header에 추가할지 고민중.
-     */
-//    private val authInterceptor = Interceptor { chain ->
-//        val newRequest = chain.request().newBuilder()
-//            .addHeader("Authorization", "Bearer $authToken")
-//            .build()
-//        chain.proceed(newRequest)
-//    }
+    private val authInterceptor = Interceptor { chain ->
+        val newRequest = chain.request().newBuilder()
+            .addHeader("Authorization", "Bearer ${BuildConfig.GITHUB_TOKEN}")
+            .build()
+        chain.proceed(newRequest)
+    }
 
     private fun provideOkHttpClient(vararg interceptors: Interceptor): OkHttpClient = OkHttpClient.Builder().run {
         interceptors.forEach {
@@ -52,7 +48,7 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .client(provideOkHttpClient(loggingInterceptor))
+        .client(provideOkHttpClient(loggingInterceptor, authInterceptor))
         .addConverterFactory(json.asConverterFactory(contentType.toMediaType()))
         .build()
 
