@@ -1,26 +1,24 @@
-package com.hongstudio.parsing_github_repositories.model
+package com.hongstudio.parsing_github_repositories.data.remote
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Parcelize
 @Serializable
-data class RepositoryListModel(
+data class ApiRepoListModel(
+    @SerialName("total_count")
+    val totalCount: Long,
     @SerialName("items")
-    val items: List<RepositoryItemModel>
-) : Parcelable
+    val items: List<ApiRepoModel>
+)
 
-@Parcelize
 @Serializable
-data class RepositoryItemModel(
+data class ApiRepoModel(
     @SerialName("name")
-    val repositoryName: String,
+    val name: String,
     @SerialName("owner")
-    val owner: OwnerModel,
+    val owner: ApiOwnerModel,
     @SerialName("description")
-    val repositoryDescription: String = "",
+    val description: String = "",
     @SerialName("stargazers_count")
     val starsCount: Int,
     @SerialName("watchers_count")
@@ -28,14 +26,13 @@ data class RepositoryItemModel(
     @SerialName("forks_count")
     val forksCount: Int,
     @SerialName("html_url")
-    val repositoryUrl: String,
-) : Parcelable
+    val repoUrl: String,
+)
 
-@Parcelize
 @Serializable
-data class OwnerModel(
+data class ApiOwnerModel(
     @SerialName("login")
     val name: String,
     @SerialName("avatar_url")
-    val imageUrl: String,
-) : Parcelable
+    val avatarUrl: String,
+)
